@@ -11,6 +11,8 @@ func getCustomValidRuleFunc(s *StructRule, f *FieldRules, ruleName string, vals 
 		return nil
 	}
 
+	replaceRuleMsg_CustomRule(f, ruleName, ruleName)
+
 	vfn := &ruleimpl.RegisterCustomRuleFunc{
 		Args:      vals[0],
 		RuleName:  ruleName,

@@ -8,7 +8,7 @@ import (
 
 type StructRule struct {
 	ruleFields []*FieldRules
-	// pkgpath + structName
+	// longName = pkgpath + structName
 	longName string
 	// shortName = structName
 	shortName string
@@ -42,7 +42,7 @@ func (f *StructRule) deleteEmptyRuleField() {
 			f.ruleFields = append(f.ruleFields[:i], f.ruleFields[i+1:]...)
 
 		} else {
-			// 如果没删除，在自增，不然会有bug
+			// 如果没删除，在自增
 			i++
 		}
 	}

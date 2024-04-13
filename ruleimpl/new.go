@@ -7,7 +7,11 @@ import (
 
 type RuleFuncInput struct {
 	// this value
-	Value   reflect.Value
+	Value reflect.Value
+
+	// TODO： 错误消息处理器，使用+号拼接字符串
+	ErrorHandler func(error) error
+
 	Message string
 	// 关联字段的值
 	// AssocFieldValues map[string]any
@@ -15,7 +19,6 @@ type RuleFuncInput struct {
 	StructPtr reflect.Value
 }
 
-// TODO： 后续把接口去掉，直接用函数来验证
 type ValidFunc interface {
 	Run(ctx context.Context, input RuleFuncInput) error
 }

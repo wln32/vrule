@@ -1,8 +1,9 @@
 package vrule
 
 import (
-	ruleimpl "github.com/wln32/vrule/ruleimpl"
 	"sync"
+
+	ruleimpl "github.com/wln32/vrule/ruleimpl"
 )
 
 var once sync.Once
@@ -11,25 +12,25 @@ type registerRuleFunc func(structRule *StructRule, fieldRule *FieldRules, s []st
 
 var builtinRulesMapToFunc = map[string]registerRuleFunc{
 	ruleimpl.Required: getRequiredRuleFunc,
-
+	//=================================================
 	ruleimpl.RequiredIf:     getRequiredIfRuleFunc,
 	ruleimpl.RequiredUnless: getRequiredUnlessRuleFunc,
-
+	//=================================================
 	ruleimpl.RequiredWith:       getRequiredWithRuleFunc,
 	ruleimpl.RequiredWithAll:    getRequiredWithAllRuleFunc,
 	ruleimpl.RequiredWithout:    getRequiredWithoutRuleFunc,
 	ruleimpl.RequiredWithoutAll: getRequiredWithoutAllRuleFunc,
-	//====================================================
-	ruleimpl.Between: getBetweenRuleFunc,
-	ruleimpl.Max:     getMaxRuleFunc,
-	ruleimpl.Min:     getMinRuleFunc,
-	ruleimpl.In:      getInRuleFunc,
-	ruleimpl.NotIn:   getNotInRuleFunc,
 	//==============string====================================
 	ruleimpl.Size:      getStringSizeRuleFunc,
 	ruleimpl.Length:    getStringLengthRuleFunc,
 	ruleimpl.MinLength: getStringMinLengthRuleFunc,
 	ruleimpl.MaxLength: getStringMaxLengthRuleFunc,
+	//================cmp====================================
+	ruleimpl.Between: getBetweenRuleFunc,
+	ruleimpl.Max:     getMaxRuleFunc,
+	ruleimpl.Min:     getMinRuleFunc,
+	ruleimpl.In:      getInRuleFunc,
+	ruleimpl.NotIn:   getNotInRuleFunc,
 	//================cmp===============================
 	ruleimpl.Lte:       getLteRuleFunc,
 	ruleimpl.Lt:        getLtRuleFunc,
@@ -39,7 +40,6 @@ var builtinRulesMapToFunc = map[string]registerRuleFunc{
 	ruleimpl.Eq:        getEqRuleFunc,
 	ruleimpl.Different: getDifferentRuleFunc,
 	ruleimpl.Same:      getSameRuleFunc,
-
 	//==================regex===============================
 	ruleimpl.RegexRuleName:    getRegexRuleMatchFunc,
 	ruleimpl.NotRegexRuleName: getRegexRuleNoMatchFunc,
@@ -47,12 +47,12 @@ var builtinRulesMapToFunc = map[string]registerRuleFunc{
 	ruleimpl.Date:     getDateRuleFunc,
 	ruleimpl.DateTime: getDateTimeRuleFunc,
 
-	ruleimpl.DataFormat: getDateTimeFormat,
-
 	ruleimpl.Before:      getBeforeTimeRuleFunc,
 	ruleimpl.BeforeEqual: getBeforeEqualTimeRuleFunc,
 	ruleimpl.After:       getAfterTimeRuleFunc,
 	ruleimpl.AfterEqual:  getAfterEqualTimeRuleFunc,
+
+	ruleimpl.DataFormat: getDateTimeFormat,
 	//=================format===================================
 	ruleimpl.JsonRuleName:    getFormatJsonRuleFunc,
 	ruleimpl.BooleanRuleName: getFormatBooleanRuleFunc,

@@ -3,6 +3,7 @@ package vrule
 import (
 	"fmt"
 	"reflect"
+	"strings"
 
 	"github.com/wln32/vrule/ruleimpl"
 
@@ -13,6 +14,8 @@ import (
 // 说明：参数大小为min到max之间(支持整形和浮点类型参数)。
 // min和max必须是具体的数字，比如1 2 3 4 ，不能是一个变量
 func getBetweenRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
+	replaceRuleMsg_Max(f, ruleimpl.Between, ruleVals[1])
+	replaceRuleMsg_Min(f, ruleimpl.Between, ruleVals[0])
 	min := ruleVals[0]
 	max := ruleVals[1]
 
@@ -49,6 +52,7 @@ func getBetweenRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimp
 // 参数类型支持数字类型和字符串，如果字符串带有空格，需要用引号包裹起来
 // TODO 支持字符串类型
 func getInRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
+	replaceRuleMsg_Pattern(f, ruleimpl.In, strings.Join(ruleVals, ","))
 	// 获取字段类型，把val转成和字段一样的类型
 	kind := f.typ.Kind()
 	switch kind {
@@ -85,6 +89,7 @@ func getInRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 // 参数类型支持数字类型和字符串，如果字符串带有空格，需要用引号包裹起来
 // TODO 支持字符串类型
 func getNotInRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
+	replaceRuleMsg_Pattern(f, ruleimpl.NotIn, strings.Join(ruleVals, ","))
 	kind := f.typ.Kind()
 	switch kind {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:

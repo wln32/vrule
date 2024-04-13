@@ -1,9 +1,10 @@
 package vrule
 
 import (
-	ruleimpl "github.com/wln32/vrule/ruleimpl"
 	"reflect"
 	"strings"
+
+	ruleimpl "github.com/wln32/vrule/ruleimpl"
 )
 
 type FieldKind int
@@ -130,6 +131,7 @@ func (f *FieldRules) setAssocFields(structName string) {
 		if index != -1 {
 			fields = append(fields, f.checkRequiredRulesIsValid(structName, ruleName, ruleVals)...)
 		} else {
+			// 主要是cmp系列的规则
 			_, ok := relatedRuleNameMap[ruleName]
 			if ok {
 				fields = append(fields, f.checkAssocRulesIsValid(structName, ruleName, ruleVals)...)

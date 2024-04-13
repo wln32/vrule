@@ -68,5 +68,5 @@ var RuleMsgMap = map[string]string{
 	After:       "The {field} value `{value}` must be after field {field1} value `{value1}`",
 	AfterEqual:  "The {field} value `{value}` must be after or equal to field {field1} value `{value1}`",
 	Before:      "The {field} value `{value}` must be before field {field1} value `{value1}`",
-	BeforeEqual: "The {field} value `{value}` must be before or equal to field {pattern}",
+	BeforeEqual: "The {field} value `{value}` must be before or equal to field {field1} value `{value1}`",
 }

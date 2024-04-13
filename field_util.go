@@ -2,9 +2,10 @@ package vrule
 
 import (
 	"fmt"
-	"github.com/wln32/vrule/ruleimpl"
 	"reflect"
 	"unicode"
+
+	"github.com/wln32/vrule/ruleimpl"
 
 	"github.com/gogf/gf/v2/os/gstructs"
 	"github.com/gogf/gf/v2/util/gconv"
@@ -237,7 +238,6 @@ func (f *FieldRules) checkAssocRulesIsValid(structName string, ruleName string, 
 	}
 	switch ruleName {
 	case ruleimpl.Lte:
-
 	case ruleimpl.Lt:
 	case ruleimpl.Gte:
 	case ruleimpl.Gt:
@@ -247,6 +247,7 @@ func (f *FieldRules) checkAssocRulesIsValid(structName string, ruleName string, 
 	case ruleimpl.Same:
 
 	}
+
 	return ruleVals
 }
 

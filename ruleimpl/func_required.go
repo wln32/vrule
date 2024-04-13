@@ -28,7 +28,6 @@ func requiredEmpty(input RuleFuncInput) error {
 	return nil
 }
 
-// TODO : 后续传递Value的时候，可以不用再调用Interface()，直接传递reflect.Value会更好
 func RequiredPtrFunc(ctx context.Context, input RuleFuncInput) error {
 	val := input.Value
 	if val.IsNil() {
@@ -37,7 +36,6 @@ func RequiredPtrFunc(ctx context.Context, input RuleFuncInput) error {
 	return nil
 }
 
-// TODO : 后续传递Value的时候，可以不用再调用Interface()，直接传递reflect.Value会更好
 func RequiredLengthFunc(ctx context.Context, input RuleFuncInput) error {
 
 	val := input.Value
@@ -47,7 +45,6 @@ func RequiredLengthFunc(ctx context.Context, input RuleFuncInput) error {
 	return nil
 }
 
-// TODO : 后续传递Value的时候，可以不用再调用Interface()，直接传递reflect.Value会更好
 func RequiredStringLengthFunc(ctx context.Context, input RuleFuncInput) error {
 
 	l := input.Value.String()
@@ -69,7 +66,7 @@ type RequiredIfRule struct {
 	//AssocFieldValues map[string]any
 	// 判定当前字段是否有值的函数
 	IsEmpty ValidFunc
-	// TODO: 直接存储依赖字段的索引，如果提前满足条件，可以跳过后面的，延迟求值
+	// 直接存储依赖字段的索引，如果提前满足条件，可以跳过后面的，延迟求值
 	AssocFields []RequiredIfRuleArg
 }
 
@@ -77,13 +74,6 @@ type RequiredIfRule struct {
 // 说明：必需参数(当field=value时，当前字段必须有值)。多个字段以,号分隔。
 func (r *RequiredIfRule) Run(ctx context.Context, input RuleFuncInput) error {
 
-	//for field, val := range r.AssocFieldValues {
-	//	v, _ := input.AssocFieldValues[field]
-	//	// 如果field=value时，判断当前字段是否有值
-	//	if v == val {
-	//		return r.IsEmpty.Run(ctx, input)
-	//	}
-	//}
 	for _, assocField := range r.AssocFields {
 		v := input.StructPtr.Field(assocField.AssocFieldIndex).Interface()
 		if v == assocField.Value {
@@ -102,21 +92,14 @@ type RequiredUnlessRule struct {
 	// 判定当前字段是否有值的函数
 	IsEmpty ValidFunc
 
-	// TODO: 直接存储依赖字段的索引，如果提前满足条件，可以跳过后面的，延迟求值
+	// 直接存储依赖字段的索引，如果提前满足条件，可以跳过后面的，延迟求值
 	AssocFields []RequiredIfRuleArg
 }
 
 // Run 格式: required-unless:field,value,...
 // 说明：必需参数(当field!=value时，当前字段必须有值)。多个字段以,号分隔。
 func (r *RequiredUnlessRule) Run(ctx context.Context, input RuleFuncInput) error {
-	//for field, val := range r.AssocFieldValues {
-	//	v, _ := input.AssocFieldValues[field]
-	//	// 当field!=value时，当前字段必须有值
-	//	if v != val {
-	//		return r.IsEmpty.Run(ctx, input)
-	//	}
-	//
-	//}
+
 	for _, assocField := range r.AssocFields {
 		v := input.StructPtr.Field(assocField.AssocFieldIndex).Interface()
 		if v != assocField.Value {
@@ -145,27 +128,13 @@ type RequiredFieldsRule struct {
 	// 依赖的字段名字
 	// 判定当前字段是否有值的函数
 	IsEmpty ValidFunc
-	// TODO: 直接存储依赖字段的索引，如果提前满足条件，可以跳过后面的，延迟求值
-
+	//  直接存储依赖字段的索引，如果提前满足条件，可以跳过后面的，延迟求值
 	AssocFields []RequiredWithRuleArg
 }
 
 // RequiredWith 格式: required-with:field1,field2,...
 // 说明：必需参数(只要有一个字段有值)。当前字段必须有值
 func (r *RequiredFieldsRule) RequiredWith(ctx context.Context, input RuleFuncInput) (err error) {
-
-	//for field, fn := range r.AssocFieldValidFunc {
-	//	err = fn.Run(ctx, RuleFuncInput{
-	//		Value:   input.AssocFieldValues[field],
-	//		Message: field,
-	//	})
-	//	// 没有错误就是有值
-	//	if err == nil {
-	//		// 只要有一个字段有值
-	//		break
-	//	}
-	//
-	//}
 
 	for _, assoc := range r.AssocFields {
 		val := input.StructPtr.Field(assoc.AssocFieldIndex)
@@ -199,16 +168,7 @@ func (r *RequiredFieldsRule) RequiredWith(ctx context.Context, input RuleFuncInp
 // 说明：必须参数(全部字段都得有值)。当前字段必须有值
 // 示例：当Id，Name，Gender，WifeName全部不为空时，HusbandName必须不为空。
 func (r *RequiredFieldsRule) RequiredWithAll(ctx context.Context, input RuleFuncInput) (err error) {
-	//for field, fn := range r.AssocFieldValidFunc {
-	//	err = fn.Run(ctx, RuleFuncInput{
-	//		Value:   input.AssocFieldValues[field],
-	//		Message: field,
-	//	})
-	//	// 如果给定的字段有一个没有值
-	//	if err != nil {
-	//		return nil
-	//	}
-	//}
+
 	for _, assoc := range r.AssocFields {
 		val := input.StructPtr.Field(assoc.AssocFieldIndex)
 		err = assoc.AssocFieldValidFunc.Run(ctx, RuleFuncInput{
@@ -236,16 +196,7 @@ func (r *RequiredFieldsRule) RequiredWithAll(ctx context.Context, input RuleFunc
 // 说明：必需参数(只要有一个字段为空)。当前字段必须有值
 // 示例：当Id或WifeName为空时，HusbandName必须不为空
 func (r *RequiredFieldsRule) RequiredWithout(ctx context.Context, input RuleFuncInput) (err error) {
-	//for field, fn := range r.AssocFieldValidFunc {
-	//	err = fn.Run(ctx, RuleFuncInput{
-	//		Value:   input.AssocFieldValues[field],
-	//		Message: field,
-	//	})
-	//	// 如果给定的字段有一个为空
-	//	if err != nil {
-	//		break
-	//	}
-	//}
+
 	for _, assoc := range r.AssocFields {
 		val := input.StructPtr.Field(assoc.AssocFieldIndex)
 		err = assoc.AssocFieldValidFunc.Run(ctx, RuleFuncInput{
@@ -272,17 +223,6 @@ func (r *RequiredFieldsRule) RequiredWithout(ctx context.Context, input RuleFunc
 // 说明：必须参数(所有字段都为空时)。当前字段必须有值
 // 示例：当Id和WifeName都为空时，HusbandName必须不为空。当前字段必须有值
 func (r *RequiredFieldsRule) RequiredWithoutAll(ctx context.Context, input RuleFuncInput) (err error) {
-
-	//for field, fn := range r.AssocFieldValidFunc {
-	//	err = fn.Run(ctx, RuleFuncInput{
-	//		Value:   input.AssocFieldValues[field],
-	//		Message: field,
-	//	})
-	//	if err == nil {
-	//		// 如果给定的字段有一个不为空，当前字段不需要有值
-	//		return nil
-	//	}
-	//}
 
 	for _, assoc := range r.AssocFields {
 		val := input.StructPtr.Field(assoc.AssocFieldIndex)

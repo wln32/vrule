@@ -12,7 +12,7 @@
 "after"=      "The {field} value `{value}` must be after field {field1} value `{value1}`"
 "after-equal"=  "The {field} value `{value}` must be after or equal to field {field1} value `{value1}`"
 "before"=      "The {field} value `{value}` must be before field {field1} value `{value1}`"
-"before-equal"= "The {field} value `{value}` must be before or equal to field {pattern}"
+"before-equal"= "The {field} value `{value}` must be before or equal to field {field1} value `{value1}`"
 #######################################################################
 "email" =                 "The {field} value `{value}` is not a valid email address"
 "phone" =                 "The {field} value `{value}` is not a valid phone number"

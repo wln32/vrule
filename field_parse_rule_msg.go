@@ -2,8 +2,9 @@ package vrule
 
 import (
 	"context"
-	ruleimpl "github.com/wln32/vrule/ruleimpl"
 	"strings"
+
+	ruleimpl "github.com/wln32/vrule/ruleimpl"
 
 	"github.com/gogf/gf/v2/text/gstr"
 )
@@ -162,12 +163,12 @@ func (f *FieldRules) addMsg(rule, msg string) {
 		msg = gstr.ReplaceByMap(msg, map[string]string{
 			"{field}": f.name, // Field longName of the `value`.
 			//"{value}":    需要再验证的时候再替换
-			"{pattern}":    strings.Join(f.ruleArray[rule], ","), // 正则和not-in， in
-			"{attribute}":  f.name,
-			"{customrule}": rule, // 用户自定义的规则名
+			//"{pattern}":    strings.Join(f.ruleArray[rule], ","), // 正则和not-in， in
+			//
+			//"{customrule}": rule, // 用户自定义的规则名
 
 		})
-		msg = f.replaceMinMaxMsg(msg)
+		// msg = f.replaceMinMaxMsg(msg)
 	}
 	ruleName := strings.Split(rule, ":")[0]
 	f.msgArray[ruleName] = msg

@@ -47,7 +47,6 @@ func (b *MinRuleNumber[T]) Run(ctx context.Context, input RuleFuncInput) error {
 
 	val := b.FieldConvertFunc(input.Value)
 	if val < b.Min {
-
 		if strings.Contains(input.Message, "{value}") {
 			input.Message = strings.Replace(input.Message, "{value}", gconv.String(val), 1)
 

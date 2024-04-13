@@ -1253,7 +1253,7 @@ func Test_BeforeEqual_Basic(t *testing.T) {
 			Time2: "2022-09-03",
 		}
 		wants := map[string]string{
-			"Time1": "The Time1 value `2022-09-04 00:00:00 +0800 CST` must be before or equal to field Time2",
+			"Time1": "The Time1 value `2022-09-04 00:00:00 +0800 CST` must be before or equal to field Time2 value `2022-09-03 00:00:00 +0800 CST`",
 		}
 		err := StructNotCache(obj).(*ValidationError)
 

@@ -28,7 +28,7 @@ func getDifferentRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) rulei
 // 说明：参数值必需与field字段参数的值相同。same规则的别名，功能同same规则。
 // 版本：框架版本>=v2.2.0
 func getEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
-
+	replaceRuleMsg_Field1(f, ruleimpl.Eq, ruleVals[0])
 	switch f.typ.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		vf := &ruleimpl.EqRule[float64]{
@@ -93,7 +93,7 @@ func getEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 // 说明：参数值必需与field字段参数的值不相同。different规则的别名，功能同different规则。
 // 版本：框架版本>=v2.2.0
 func getNotEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
-
+	replaceRuleMsg_Field1(f, ruleimpl.NotEq, ruleVals[0])
 	switch f.typ.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		vf := &ruleimpl.NotEqRule[float64]{
@@ -142,7 +142,7 @@ func getNotEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.
 // 说明：参数值必需大于给定字段对应的值。
 // 版本：框架版本>=v2.2.0
 func getGtRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
-
+	replaceRuleMsg_Field1(f, ruleimpl.Gt, ruleVals[0])
 	switch f.typ.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 
@@ -177,7 +177,7 @@ func getGtRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 // 说明：参数值必需大于等于给定字段对应的值。
 // 版本：框架版本>=v2.2.0
 func getGteRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
-
+	replaceRuleMsg_Field1(f, ruleimpl.Gte, ruleVals[0])
 	switch f.typ.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 
@@ -212,7 +212,7 @@ func getGteRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Va
 // 说明：参数值必需小于给定字段对应的值。
 // 版本：框架版本>=v2.2.0
 func getLtRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
-
+	replaceRuleMsg_Field1(f, ruleimpl.Lt, ruleVals[0])
 	switch f.typ.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 
@@ -247,7 +247,7 @@ func getLtRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 // 说明：参数值必需小于等于给定字段对应的值。
 // 版本：框架版本>=v2.2.0
 func getLteRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
-
+	replaceRuleMsg_Field1(f, ruleimpl.Lte, ruleVals[0])
 	switch f.typ.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 

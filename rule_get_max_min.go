@@ -12,7 +12,7 @@ import (
 // 说明：字段的值最大为max(支持整形和浮点类型参数)。value<=max
 // max必须是一个数字，比如1 2 3，不能是一个变量
 func getMaxRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
-
+	replaceRuleMsg_Max(f, ruleimpl.Max, ruleVals[0])
 	max := ruleVals[0]
 
 	switch f.typ.Kind() {
@@ -43,7 +43,7 @@ func getMaxRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Va
 // 说明：字段的值最小为min(支持整形和浮点类型参数)， value>=min
 // min必须是一个数字，比如1 2 3，不能是一个变量
 func getMinRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
-
+	replaceRuleMsg_Min(f, ruleimpl.Min, ruleVals[0])
 	min := ruleVals[0]
 
 	switch f.typ.Kind() {
