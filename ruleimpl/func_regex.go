@@ -61,7 +61,7 @@ type RegexMatch struct {
 }
 
 func (r *RegexMatch) RegexRuleMatch(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	match := r.Pattern.MatchString(val)
 	if match {
 		return nil
@@ -69,7 +69,7 @@ func (r *RegexMatch) RegexRuleMatch(ctx context.Context, input RuleFuncInput) er
 	return errors.New(strings.Replace(input.Message, "{value}", val, 1))
 }
 func (r *RegexMatch) RegexRuleNoMatch(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	match := r.Pattern.MatchString(val)
 	if !match {
 		return nil
@@ -78,7 +78,7 @@ func (r *RegexMatch) RegexRuleNoMatch(ctx context.Context, input RuleFuncInput) 
 }
 
 func RegexRuleMatchQQ(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	match := patternQQ.MatchString(val)
 	if match {
 		return nil
@@ -87,7 +87,7 @@ func RegexRuleMatchQQ(ctx context.Context, input RuleFuncInput) error {
 }
 
 func RegexRuleMatchDomain(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	match := patternDomain.MatchString(val)
 	if match {
 		return nil
@@ -95,7 +95,7 @@ func RegexRuleMatchDomain(ctx context.Context, input RuleFuncInput) error {
 	return errors.New(strings.Replace(input.Message, "{value}", val, 1))
 }
 func RegexRuleMatchUrl(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	match := patternUrl.MatchString(val)
 	if match {
 		return nil
@@ -103,24 +103,24 @@ func RegexRuleMatchUrl(ctx context.Context, input RuleFuncInput) error {
 	return errors.New(strings.Replace(input.Message, "{value}", val, 1))
 }
 func RegexRuleMatchMac(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	match := patternMac.MatchString(val)
 	if match {
 		return nil
 	}
 	return errors.New(strings.Replace(input.Message, "{value}", val, 1))
 }
-func RegexRuleMatchIp(ctx context.Context, in RuleFuncInput) error {
-	val := in.Value.(string)
+func RegexRuleMatchIp(ctx context.Context, input RuleFuncInput) error {
+	val := input.Value.String()
 
 	if ok := patternIpv4.MatchString(val) || patternIpv6.MatchString(val); !ok {
-		return errors.New(strings.Replace(in.Message, "{value}", val, 1))
+		return errors.New(strings.Replace(input.Message, "{value}", val, 1))
 	}
 
 	return nil
 }
 func RegexRuleMatchIpv4(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	match := patternIpv4.MatchString(val)
 	if match {
 		return nil
@@ -128,7 +128,7 @@ func RegexRuleMatchIpv4(ctx context.Context, input RuleFuncInput) error {
 	return errors.New(strings.Replace(input.Message, "{value}", val, 1))
 }
 func RegexRuleMatchIpv6(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	match := patternIpv6.MatchString(val)
 	if match {
 		return nil
@@ -136,7 +136,7 @@ func RegexRuleMatchIpv6(ctx context.Context, input RuleFuncInput) error {
 	return errors.New(strings.Replace(input.Message, "{value}", val, 1))
 }
 func RegexRuleMatchBankCard(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	match := checkLuHn(val)
 	if match {
 		return nil
@@ -144,7 +144,7 @@ func RegexRuleMatchBankCard(ctx context.Context, input RuleFuncInput) error {
 	return errors.New(strings.Replace(input.Message, "{value}", val, 1))
 }
 func RegexRuleMatchResidentId(ctx context.Context, input RuleFuncInput) error {
-	id := input.Value.(string)
+	id := input.Value.String()
 	ok := checkResidentId(id)
 	if ok {
 		return nil
@@ -152,7 +152,7 @@ func RegexRuleMatchResidentId(ctx context.Context, input RuleFuncInput) error {
 	return errors.New(strings.Replace(input.Message, "{value}", id, 1))
 }
 func RegexRuleMatchPostCode(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	match := patternPostcode.MatchString(val)
 	if match {
 		return nil
@@ -160,7 +160,7 @@ func RegexRuleMatchPostCode(ctx context.Context, input RuleFuncInput) error {
 	return errors.New(strings.Replace(input.Message, "{value}", val, 1))
 }
 func RegexRuleMatchPassword(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	match := patternPassword.MatchString(val)
 	if match {
 		return nil
@@ -171,7 +171,7 @@ func RegexRuleMatchPassword(ctx context.Context, input RuleFuncInput) error {
 // 格式: password2
 // 说明：中等强度密码（在通用密码规则的基础上，要求密码必须包含大小写字母和数字）。
 func RegexRuleMatchPassword2(ctx context.Context, input RuleFuncInput) error {
-	value := input.Value.(string)
+	value := input.Value.String()
 	if gregex.IsMatchString(`^[\w\S]{6,18}$`, value) &&
 		gregex.IsMatchString(`[a-z]+`, value) &&
 		gregex.IsMatchString(`[A-Z]+`, value) &&
@@ -185,7 +185,7 @@ func RegexRuleMatchPassword2(ctx context.Context, input RuleFuncInput) error {
 // 格式: password3
 // 说明：强等强度密码（在通用密码规则的基础上，必须包含大小写字母、数字和特殊字符）。
 func RegexRuleMatchPassword3(ctx context.Context, input RuleFuncInput) error {
-	value := input.Value.(string)
+	value := input.Value.String()
 	if gregex.IsMatchString(`^[\w\S]{6,18}$`, value) &&
 		gregex.IsMatchString(`[a-z]+`, value) &&
 		gregex.IsMatchString(`[A-Z]+`, value) &&
@@ -196,7 +196,7 @@ func RegexRuleMatchPassword3(ctx context.Context, input RuleFuncInput) error {
 	return errors.New(strings.Replace(input.Message, "{value}", value, 1))
 }
 func RegexRuleMatchPassport(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	match := patternPassport.MatchString(val)
 	if match {
 		return nil
@@ -205,7 +205,7 @@ func RegexRuleMatchPassport(ctx context.Context, input RuleFuncInput) error {
 }
 
 func RegexRuleMatchPhone(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	match := patternPhone.MatchString(val)
 	if match {
 		return nil
@@ -214,7 +214,7 @@ func RegexRuleMatchPhone(ctx context.Context, input RuleFuncInput) error {
 }
 
 func RegexRuleMatchTelephone(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	match := patternTelephone.MatchString(val)
 	if match {
 		return nil
@@ -222,7 +222,7 @@ func RegexRuleMatchTelephone(ctx context.Context, input RuleFuncInput) error {
 	return errors.New(strings.Replace(input.Message, "{value}", val, 1))
 }
 func RegexRuleMatchPhoneLoose(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	match := patternPhoneLoose.MatchString(val)
 	if match {
 		return nil
@@ -230,7 +230,7 @@ func RegexRuleMatchPhoneLoose(ctx context.Context, input RuleFuncInput) error {
 	return errors.New(strings.Replace(input.Message, "{value}", val, 1))
 }
 func RegexRuleMatchEmail(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	match := patternEmail.MatchString(val)
 	if match {
 		return nil

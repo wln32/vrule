@@ -100,7 +100,7 @@ type iTime interface {
 // 示例：date-format:Y-m-d H:i:s
 func (t *DateFormatRule) Run(ctx context.Context, in RuleFuncInput) error {
 
-	if _, err := gtime.StrToTimeFormat(in.Value.(string), t.Format); err != nil {
+	if _, err := gtime.StrToTimeFormat(in.Value.String(), t.Format); err != nil {
 		return errors.New(gstr.ReplaceByMap(in.Message, map[string]string{
 			"{value}": gconv.String(in.Value),
 		}))
@@ -117,7 +117,7 @@ var dateFormatPattern = regexp.MustCompile(`\d{4}[.\-_/]?\d{2}[.\-_/]?\d{2}`)
 // 也支持不带连接符号的8位长度日期，格式如： 2006-01-02, 2006/01/02, 2006.01.02, 20060102
 func DateRuleFunc(ctx context.Context, in RuleFuncInput) error {
 
-	if dateFormatPattern.MatchString(in.Value.(string)) == false {
+	if dateFormatPattern.MatchString(in.Value.String()) == false {
 		return errors.New(gstr.ReplaceByMap(in.Message, map[string]string{
 			"{value}": gconv.String(in.Value),
 		}))
@@ -129,7 +129,7 @@ func DateRuleFunc(ctx context.Context, in RuleFuncInput) error {
 // 说明：参数为常用日期时间类型，其中日期之间支持的连接符号只支持-，格式如： 2006-01-02 12:00:00
 func DateTimeRuleFunc(ctx context.Context, in RuleFuncInput) error {
 
-	if _, err := gtime.StrToTimeFormat(in.Value.(string), `Y-m-d H:i:s`); err != nil {
+	if _, err := gtime.StrToTimeFormat(in.Value.String(), `Y-m-d H:i:s`); err != nil {
 		return errors.New(gstr.ReplaceByMap(in.Message, map[string]string{
 			"{value}": gconv.String(in.Value),
 		}))

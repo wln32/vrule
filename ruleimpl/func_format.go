@@ -23,7 +23,7 @@ var boolMap = map[string]struct{}{
 }
 
 func JsonFormat(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	if json.Valid([]byte(val)) {
 		return nil
 	}
@@ -31,7 +31,7 @@ func JsonFormat(ctx context.Context, input RuleFuncInput) error {
 	return errors.New(errMsg)
 }
 func BooleanFormat(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	if _, ok := boolMap[strings.ToLower(val)]; ok {
 		return nil
 	}
@@ -39,7 +39,7 @@ func BooleanFormat(ctx context.Context, input RuleFuncInput) error {
 	return errors.New(errMsg)
 }
 func IntegerFormat(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	if _, err := strconv.Atoi(val); err == nil {
 		return nil
 	}
@@ -47,7 +47,7 @@ func IntegerFormat(ctx context.Context, input RuleFuncInput) error {
 	return errors.New(errMsg)
 }
 func FloatFormat(ctx context.Context, input RuleFuncInput) error {
-	val := input.Value.(string)
+	val := input.Value.String()
 	if _, err := strconv.ParseFloat(val, 10); err == nil {
 		return nil
 	}

@@ -16,7 +16,7 @@ type StringSizeRule struct {
 // 格式: size:size
 // 说明：参数长度为 size (长度参数为整形)，注意底层使用Unicode计算长度，因此中文一个汉字占1个长度单位。
 func (s *StringSizeRule) Run(ctx context.Context, input RuleFuncInput) error {
-	runes := []rune(input.Value.(string))
+	runes := []rune(input.Value.String())
 	valueLen := len(runes)
 	if valueLen != s.Size {
 
@@ -40,7 +40,7 @@ type StringLengthRule struct {
 // 格式: length:min,max
 // 说明：参数长度为min到max(长度参数为整形)，注意底层使用Unicode计算长度，因此中文一个汉字占1个长度单位。
 func (s *StringLengthRule) Run(ctx context.Context, input RuleFuncInput) error {
-	runes := []rune(input.Value.(string))
+	runes := []rune(input.Value.String())
 	valueLen := len(runes)
 	if valueLen < s.Min || valueLen > s.Max {
 		if strings.Contains(input.Message, "{") {
@@ -62,7 +62,7 @@ type StringMinLengthRule struct {
 // 格式: min-length:min
 // 说明：参数长度最小为min(长度参数为整形)，注意底层使用Unicode计算长度，因此中文一个汉字占1个长度单位。
 func (s *StringMinLengthRule) Run(ctx context.Context, input RuleFuncInput) error {
-	runes := []rune(input.Value.(string))
+	runes := []rune(input.Value.String())
 
 	if len(runes) < s.Min {
 		if strings.Contains(input.Message, "{") {
@@ -84,7 +84,7 @@ type StringMaxLengthRule struct {
 // 格式: max-length:max
 // 说明：参数长度最大为max(长度参数为整形)，注意底层使用Unicode计算长度，因此中文一个汉字占1个长度单位。
 func (s *StringMaxLengthRule) Run(ctx context.Context, input RuleFuncInput) error {
-	runes := []rune(input.Value.(string))
+	runes := []rune(input.Value.String())
 	if len(runes) > s.Max {
 		if strings.Contains(input.Message, "{") {
 			input.Message = gstr.ReplaceByMap(input.Message, map[string]string{

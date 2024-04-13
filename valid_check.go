@@ -2,8 +2,9 @@ package vrule
 
 import (
 	"context"
-	"github.com/wln32/vrule/ruleimpl"
 	"reflect"
+
+	"github.com/wln32/vrule/ruleimpl"
 )
 
 // struct: field*
@@ -218,9 +219,9 @@ func (f *FieldRules) checkBasic(ctx context.Context, val reflect.Value, StructPt
 	}
 	var err error
 	for ruleName, fn := range f.Funcs {
-		fieldVal := val.Interface()
+		// fieldVal := val.Interface()
 		err = fn.Run(ctx, ruleimpl.RuleFuncInput{
-			Value: fieldVal,
+			Value: val,
 
 			StructPtr: StructPtr,
 			Message:   f.msgArray[ruleName],

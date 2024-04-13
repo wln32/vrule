@@ -3,7 +3,6 @@ package ruleimpl
 import (
 	"context"
 	"errors"
-	"reflect"
 )
 
 // required: string len==0
@@ -31,7 +30,7 @@ func requiredEmpty(input RuleFuncInput) error {
 
 // TODO : 后续传递Value的时候，可以不用再调用Interface()，直接传递reflect.Value会更好
 func RequiredPtrFunc(ctx context.Context, input RuleFuncInput) error {
-	val := reflect.ValueOf(input.Value)
+	val := input.Value
 	if val.IsNil() {
 		return errors.New(input.Message)
 	}
@@ -41,7 +40,7 @@ func RequiredPtrFunc(ctx context.Context, input RuleFuncInput) error {
 // TODO : 后续传递Value的时候，可以不用再调用Interface()，直接传递reflect.Value会更好
 func RequiredLengthFunc(ctx context.Context, input RuleFuncInput) error {
 
-	val := reflect.ValueOf(input.Value)
+	val := input.Value
 	if val.Len() == 0 {
 		return errors.New(input.Message)
 	}
@@ -51,7 +50,7 @@ func RequiredLengthFunc(ctx context.Context, input RuleFuncInput) error {
 // TODO : 后续传递Value的时候，可以不用再调用Interface()，直接传递reflect.Value会更好
 func RequiredStringLengthFunc(ctx context.Context, input RuleFuncInput) error {
 
-	l := input.Value.(string)
+	l := input.Value.String()
 	if len(l) == 0 {
 		return errors.New(input.Message)
 	}
@@ -169,7 +168,7 @@ func (r *RequiredFieldsRule) RequiredWith(ctx context.Context, input RuleFuncInp
 	//}
 
 	for _, assoc := range r.AssocFields {
-		val := input.StructPtr.Field(assoc.AssocFieldIndex).Interface()
+		val := input.StructPtr.Field(assoc.AssocFieldIndex)
 		err = assoc.AssocFieldValidFunc.Run(ctx, RuleFuncInput{
 			Value:   val,
 			Message: "1",
@@ -211,7 +210,7 @@ func (r *RequiredFieldsRule) RequiredWithAll(ctx context.Context, input RuleFunc
 	//	}
 	//}
 	for _, assoc := range r.AssocFields {
-		val := input.StructPtr.Field(assoc.AssocFieldIndex).Interface()
+		val := input.StructPtr.Field(assoc.AssocFieldIndex)
 		err = assoc.AssocFieldValidFunc.Run(ctx, RuleFuncInput{
 			Value:   val,
 			Message: "1",
@@ -248,7 +247,7 @@ func (r *RequiredFieldsRule) RequiredWithout(ctx context.Context, input RuleFunc
 	//	}
 	//}
 	for _, assoc := range r.AssocFields {
-		val := input.StructPtr.Field(assoc.AssocFieldIndex).Interface()
+		val := input.StructPtr.Field(assoc.AssocFieldIndex)
 		err = assoc.AssocFieldValidFunc.Run(ctx, RuleFuncInput{
 			Value:   val,
 			Message: "1",
@@ -286,7 +285,7 @@ func (r *RequiredFieldsRule) RequiredWithoutAll(ctx context.Context, input RuleF
 	//}
 
 	for _, assoc := range r.AssocFields {
-		val := input.StructPtr.Field(assoc.AssocFieldIndex).Interface()
+		val := input.StructPtr.Field(assoc.AssocFieldIndex)
 		err = assoc.AssocFieldValidFunc.Run(ctx, RuleFuncInput{
 			Value:   val,
 			Message: "1",
