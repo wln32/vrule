@@ -16,6 +16,8 @@ vrule它具有以下功能：
 ---
 # 安装
 
+#### go版本要求 >=1.18
+
 #### 使用go get
 ```go
 go get -u github.com/wln32/vrule

@@ -1,8 +1,9 @@
 package vrule
 
 import (
-	"github.com/wln32/vrule/ruleimpl"
 	"reflect"
+
+	"github.com/wln32/vrule/ruleimpl"
 )
 
 type StructRule struct {
