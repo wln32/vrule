@@ -2,8 +2,9 @@ package vrule
 
 import (
 	"fmt"
-	"github.com/wln32/vrule/ruleimpl"
 	"reflect"
+
+	"github.com/wln32/vrule/ruleimpl"
 )
 
 // 输入一个FROM数字类型，转换到TO类型，奇技淫巧，不建议使用
@@ -13,12 +14,29 @@ func convertNumber[FROM, TO ruleimpl.Number]() func(any) TO {
 	}
 }
 
-func defaultFieldValueConvert(a any) any {
-	return a
+func getFieldReflectConvert[TO ruleimpl.Number](x any) func(reflect.Value) TO {
+
+	switch x.(type) {
+	case int64:
+		return func(value reflect.Value) TO {
+			return TO(value.Int())
+		}
+	case uint64:
+		return func(value reflect.Value) TO {
+			return TO(value.Uint())
+		}
+	case float64:
+		return func(value reflect.Value) TO {
+			return TO(value.Float())
+		}
+	default:
+		panic("不支持的类型")
+	}
 }
 
 // 转换到TO类型
 func getFieldTypeConvert[TO ruleimpl.Number](f *FieldRules) func(any) TO {
+
 	if f == nil {
 		return nil
 	}

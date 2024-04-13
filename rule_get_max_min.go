@@ -1,14 +1,16 @@
 package vrule
 
 import (
-	"github.com/wln32/vrule/ruleimpl"
 	"reflect"
+
+	"github.com/wln32/vrule/ruleimpl"
 
 	"github.com/gogf/gf/v2/util/gconv"
 )
 
 // 格式: max:max
-// 说明：参数大小最大为max(支持整形和浮点类型参数)。
+// 说明：字段的值最大为max(支持整形和浮点类型参数)。value<=max
+// max必须是一个数字，比如1 2 3，不能是一个变量
 func getMaxRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
 
 	max := ruleVals[0]
@@ -18,17 +20,17 @@ func getMaxRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Va
 
 		return &ruleimpl.MaxRuleNumber[int64]{
 			Max:              gconv.Int64(max),
-			FieldConvertFunc: getFieldTypeConvert[int64](f),
+			FieldConvertFunc: getFieldReflectConvert[int64](int64(1)),
 		}
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 		return &ruleimpl.MaxRuleNumber[uint64]{
 			Max:              gconv.Uint64(max),
-			FieldConvertFunc: getFieldTypeConvert[uint64](f),
+			FieldConvertFunc: getFieldReflectConvert[uint64](uint64(1)),
 		}
 	case reflect.Float32, reflect.Float64:
 		return &ruleimpl.MaxRuleNumber[float64]{
 			Max:              gconv.Float64(max),
-			FieldConvertFunc: getFieldTypeConvert[float64](f),
+			FieldConvertFunc: getFieldReflectConvert[float64](float64(1)),
 		}
 	default:
 		panicUnsupportedTypeError("get max rule func", f.typ)
@@ -38,7 +40,8 @@ func getMaxRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Va
 }
 
 // 格式: min:min
-// 说明：参数大小最小为min(支持整形和浮点类型参数)。
+// 说明：字段的值最小为min(支持整形和浮点类型参数)， value>=min
+// min必须是一个数字，比如1 2 3，不能是一个变量
 func getMinRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
 
 	min := ruleVals[0]
@@ -48,17 +51,17 @@ func getMinRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Va
 
 		return &ruleimpl.MinRuleNumber[int64]{
 			Min:              gconv.Int64(min),
-			FieldConvertFunc: getFieldTypeConvert[int64](f),
+			FieldConvertFunc: getFieldReflectConvert[int64](int64(1)),
 		}
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 		return &ruleimpl.MinRuleNumber[uint64]{
 			Min:              gconv.Uint64(min),
-			FieldConvertFunc: getFieldTypeConvert[uint64](f),
+			FieldConvertFunc: getFieldReflectConvert[uint64](uint64(1)),
 		}
 	case reflect.Float32, reflect.Float64:
 		return &ruleimpl.MinRuleNumber[float64]{
 			Min:              gconv.Float64(min),
-			FieldConvertFunc: getFieldTypeConvert[float64](f),
+			FieldConvertFunc: getFieldReflectConvert[float64](float64(1)),
 		}
 	default:
 		panicUnsupportedTypeError("get min rule func", f.typ)

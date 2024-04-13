@@ -7,7 +7,7 @@ import (
 
 type RuleFuncInput struct {
 	// this value
-	Value   any
+	Value   reflect.Value
 	Message string
 	// 关联字段的值
 	// AssocFieldValues map[string]any

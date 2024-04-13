@@ -3,6 +3,7 @@ package ruleimpl
 import (
 	"context"
 	"errors"
+	"reflect"
 
 	"strings"
 
@@ -14,7 +15,7 @@ import (
 type MaxRuleNumber[T Number] struct {
 	Max T
 	// 当前字段的转换函数
-	FieldConvertFunc func(from any) T
+	FieldConvertFunc func(from reflect.Value) T
 }
 
 // 格式: max:max
@@ -37,7 +38,7 @@ func (b *MaxRuleNumber[T]) Run(ctx context.Context, input RuleFuncInput) error {
 type MinRuleNumber[T Number] struct {
 	Min T
 	// 当前字段的转换函数
-	FieldConvertFunc func(from any) T
+	FieldConvertFunc func(from reflect.Value) T
 }
 
 // 格式: max:max

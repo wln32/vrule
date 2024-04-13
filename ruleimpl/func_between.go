@@ -3,6 +3,7 @@ package ruleimpl
 import (
 	"context"
 	"fmt"
+	"reflect"
 	"strings"
 
 	"github.com/gogf/gf/v2/util/gconv"
@@ -14,7 +15,7 @@ type BetweenRuleNumber[T Number] struct {
 	Min T
 	Max T
 	// 当前字段的转换函数
-	FieldConvertFunc func(from any) T
+	FieldConvertFunc func(from reflect.Value) T
 }
 
 // 比如 Run(ctx context.Context, input ...any) error
@@ -39,7 +40,7 @@ func (b *BetweenRuleNumber[T]) Run(ctx context.Context, input RuleFuncInput) err
 type RangeRule[T Number] struct {
 	Values []T
 	// 当前字段的转换函数
-	FieldConvertFunc func(from any) T
+	FieldConvertFunc func(from reflect.Value) T
 }
 
 // 格式: in:value1,value2,...
