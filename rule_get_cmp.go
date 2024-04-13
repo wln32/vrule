@@ -1,8 +1,9 @@
 package vrule
 
 import (
-	"github.com/wln32/vrule/ruleimpl"
 	"reflect"
+
+	"github.com/wln32/vrule/ruleimpl"
 )
 
 // TODO：优化 字段类型转换函数和依赖字段类型转换函数，如果类型是兼容的，可以转到一个
@@ -32,7 +33,7 @@ func getEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 		vf := &ruleimpl.EqRule[float64]{
 			FieldName:             ruleVals[0],
 			AssocFieldConvertFunc: getAssocFieldTypeConvert[float64](s, ruleVals[0]),
-			FieldConvertFunc:      getFieldTypeConvert[float64](f),
+			FieldConvertFunc:      getFieldReflectConvert[float64](float64(1)),
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 
@@ -41,7 +42,7 @@ func getEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 		vf := &ruleimpl.EqRule[float64]{
 			FieldName:             ruleVals[0],
 			AssocFieldConvertFunc: getAssocFieldTypeConvert[float64](s, ruleVals[0]),
-			FieldConvertFunc:      getFieldTypeConvert[float64](f),
+			FieldConvertFunc:      getFieldReflectConvert[float64](float64(1)),
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 		return ruleimpl.ValidFuncImpl(vf.EqNumber)
@@ -49,7 +50,7 @@ func getEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 		vf := &ruleimpl.EqRule[float64]{
 			FieldName:             ruleVals[0],
 			AssocFieldConvertFunc: getAssocFieldTypeConvert[float64](s, ruleVals[0]),
-			FieldConvertFunc:      getFieldTypeConvert[float64](f),
+			FieldConvertFunc:      getFieldReflectConvert[float64](float64(1)),
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 		return ruleimpl.ValidFuncImpl(vf.EqNumber)
@@ -64,7 +65,7 @@ func getEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 			FieldName:       ruleVals[0],
 			AssocFieldIndex: f.requiredFieldsIndex[ruleVals[0]],
 		}
-		return ruleimpl.ValidFuncImpl(vf.EqString)
+		return ruleimpl.ValidFuncImpl(vf.EqBool)
 	default:
 		panicUnsupportedTypeError("get eq rule func", f.typ)
 	}
@@ -82,7 +83,7 @@ func getNotEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.
 		vf := &ruleimpl.NotEqRule[float64]{
 			FieldName:             ruleVals[0],
 			AssocFieldConvertFunc: getAssocFieldTypeConvert[float64](s, ruleVals[0]),
-			FieldConvertFunc:      getFieldTypeConvert[float64](f),
+			FieldConvertFunc:      getFieldReflectConvert[float64](float64(1)),
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 		return ruleimpl.ValidFuncImpl(vf.NotEqNumber)
@@ -90,7 +91,7 @@ func getNotEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.
 		vf := &ruleimpl.NotEqRule[float64]{
 			FieldName:             ruleVals[0],
 			AssocFieldConvertFunc: getAssocFieldTypeConvert[float64](s, ruleVals[0]),
-			FieldConvertFunc:      getFieldTypeConvert[float64](f),
+			FieldConvertFunc:      getFieldReflectConvert[float64](float64(1)),
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 		return ruleimpl.ValidFuncImpl(vf.NotEqNumber)
@@ -98,7 +99,7 @@ func getNotEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.
 		vf := &ruleimpl.NotEqRule[float64]{
 			FieldName:             ruleVals[0],
 			AssocFieldConvertFunc: getAssocFieldTypeConvert[float64](s, ruleVals[0]),
-			FieldConvertFunc:      getFieldTypeConvert[float64](f),
+			FieldConvertFunc:      getFieldReflectConvert[float64](float64(1)),
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 		return ruleimpl.ValidFuncImpl(vf.NotEqNumber)
@@ -113,7 +114,7 @@ func getNotEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.
 			FieldName:       ruleVals[0],
 			AssocFieldIndex: f.requiredFieldsIndex[ruleVals[0]],
 		}
-		return ruleimpl.ValidFuncImpl(vf.NotEqString)
+		return ruleimpl.ValidFuncImpl(vf.NotEqBool)
 
 	default:
 		panicUnsupportedTypeError("get not-eq rule func", f.typ)
@@ -132,21 +133,21 @@ func getGtRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 		return &ruleimpl.GtRuleNumber[float64]{
 			FieldName:             ruleVals[0],
 			AssocFieldConvertFunc: getAssocFieldTypeConvert[float64](s, ruleVals[0]),
-			FieldConvertFunc:      getFieldTypeConvert[float64](f),
+			FieldConvertFunc:      getFieldReflectConvert[float64](float64(1)),
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 		return &ruleimpl.GtRuleNumber[float64]{
 			FieldName:             ruleVals[0],
 			AssocFieldConvertFunc: getAssocFieldTypeConvert[float64](s, ruleVals[0]),
-			FieldConvertFunc:      getFieldTypeConvert[float64](f),
+			FieldConvertFunc:      getFieldReflectConvert[float64](float64(1)),
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 	case reflect.Float32, reflect.Float64:
 		return &ruleimpl.GtRuleNumber[float64]{
 			FieldName:             ruleVals[0],
 			AssocFieldConvertFunc: getAssocFieldTypeConvert[float64](s, ruleVals[0]),
-			FieldConvertFunc:      getFieldTypeConvert[float64](f),
+			FieldConvertFunc:      getFieldReflectConvert[float64](float64(1)),
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 	default:
@@ -167,21 +168,21 @@ func getGteRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Va
 		return &ruleimpl.GteRuleNumber[float64]{
 			FieldName:             ruleVals[0],
 			AssocFieldConvertFunc: getAssocFieldTypeConvert[float64](s, ruleVals[0]),
-			FieldConvertFunc:      getFieldTypeConvert[float64](f),
+			FieldConvertFunc:      getFieldReflectConvert[float64](float64(1)),
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 		return &ruleimpl.GteRuleNumber[float64]{
 			FieldName:             ruleVals[0],
 			AssocFieldConvertFunc: getAssocFieldTypeConvert[float64](s, ruleVals[0]),
-			FieldConvertFunc:      getFieldTypeConvert[float64](f),
+			FieldConvertFunc:      getFieldReflectConvert[float64](float64(1)),
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 	case reflect.Float32, reflect.Float64:
 		return &ruleimpl.GteRuleNumber[float64]{
 			FieldName:             ruleVals[0],
 			AssocFieldConvertFunc: getAssocFieldTypeConvert[float64](s, ruleVals[0]),
-			FieldConvertFunc:      getFieldTypeConvert[float64](f),
+			FieldConvertFunc:      getFieldReflectConvert[float64](float64(1)),
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 	default:
@@ -202,21 +203,21 @@ func getLtRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 		return &ruleimpl.LtRuleNumber[float64]{
 			FieldName:             ruleVals[0],
 			AssocFieldConvertFunc: getAssocFieldTypeConvert[float64](s, ruleVals[0]),
-			FieldConvertFunc:      getFieldTypeConvert[float64](f),
+			FieldConvertFunc:      getFieldReflectConvert[float64](float64(1)),
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 		return &ruleimpl.LtRuleNumber[float64]{
 			FieldName:             ruleVals[0],
 			AssocFieldConvertFunc: getAssocFieldTypeConvert[float64](s, ruleVals[0]),
-			FieldConvertFunc:      getFieldTypeConvert[float64](f),
+			FieldConvertFunc:      getFieldReflectConvert[float64](float64(1)),
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 	case reflect.Float32, reflect.Float64:
 		return &ruleimpl.LtRuleNumber[float64]{
 			FieldName:             ruleVals[0],
 			AssocFieldConvertFunc: getAssocFieldTypeConvert[float64](s, ruleVals[0]),
-			FieldConvertFunc:      getFieldTypeConvert[float64](f),
+			FieldConvertFunc:      getFieldReflectConvert[float64](float64(1)),
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 	default:
@@ -237,7 +238,7 @@ func getLteRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Va
 		return &ruleimpl.LteRuleNumber[float64]{
 			FieldName:             ruleVals[0],
 			AssocFieldConvertFunc: getAssocFieldTypeConvert[float64](s, ruleVals[0]),
-			FieldConvertFunc:      getFieldTypeConvert[float64](f),
+			FieldConvertFunc:      getFieldReflectConvert[float64](float64(1)),
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 
@@ -245,14 +246,14 @@ func getLteRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Va
 		return &ruleimpl.LteRuleNumber[float64]{
 			FieldName:             ruleVals[0],
 			AssocFieldConvertFunc: getAssocFieldTypeConvert[float64](s, ruleVals[0]),
-			FieldConvertFunc:      getFieldTypeConvert[float64](f),
+			FieldConvertFunc:      getFieldReflectConvert[float64](float64(1)),
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 	case reflect.Float32, reflect.Float64:
 		return &ruleimpl.LteRuleNumber[float64]{
 			FieldName:             ruleVals[0],
 			AssocFieldConvertFunc: getAssocFieldTypeConvert[float64](s, ruleVals[0]),
-			FieldConvertFunc:      getFieldTypeConvert[float64](f),
+			FieldConvertFunc:      getFieldReflectConvert[float64](float64(1)),
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 	default:
