@@ -45,19 +45,13 @@ func getAssocFieldTypeConvert[TO ruleimpl.Number](s *StructRule, fieldName strin
 
 	switch field.Type.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return func(value reflect.Value) TO {
-			return TO(value.Int())
-		}
+		return getFieldReflectConvert[TO](int64(1))
 
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		return func(value reflect.Value) TO {
-			return TO(value.Uint())
-		}
+		return getFieldReflectConvert[TO](uint64(1))
 
 	case reflect.Float32, reflect.Float64:
-		return func(value reflect.Value) TO {
-			return TO(value.Float())
-		}
+		return getFieldReflectConvert[TO](float64(1))
 
 	}
 	panicUnsupportedTypeError("get assoc field convert func", field.Type)

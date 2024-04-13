@@ -3,10 +3,11 @@ package vrule
 import (
 	"context"
 	"fmt"
-	"github.com/wln32/vrule/ruleimpl"
 	"strconv"
 	"strings"
 	"testing"
+
+	"github.com/wln32/vrule/ruleimpl"
 
 	"github.com/gogf/gf/v2/test/gtest"
 )
@@ -18,7 +19,7 @@ func Test_CustomRule_Basic(t *testing.T) {
 	}
 
 	fn := func(ctx context.Context, in *ruleimpl.CustomRuleInput) error {
-		val := in.Value.(string)
+		val := in.Value.String()
 		trimVal := strings.TrimSpace(val)
 		trimLength, err := strconv.Atoi(in.Args)
 		if err != nil {
@@ -53,13 +54,13 @@ func Test_CustomRule_DuplicateDefinition(t *testing.T) {
 	}
 
 	fn := func(ctx context.Context, in *ruleimpl.CustomRuleInput) error {
-		val := in.Value.(int)
+		val := in.Value.Int()
 		minValue, err := strconv.Atoi(in.Args)
 		if err != nil {
 			return err
 		}
 
-		if val < minValue {
+		if val < int64(minValue) {
 			return fmt.Errorf("field:%s Does not meet the verification rules", in.FieldName)
 		}
 		return nil
@@ -87,7 +88,7 @@ func Test_CustomRule_AssocField(t *testing.T) {
 	}
 
 	fn := func(ctx context.Context, in *ruleimpl.CustomRuleInput) error {
-		val := in.Value.(string)
+		val := in.Value.String()
 		trimVal := strings.TrimSpace(val)
 		trimLength, err := strconv.Atoi(in.Args)
 		if err != nil {

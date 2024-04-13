@@ -6,7 +6,7 @@ import (
 )
 
 type CustomRuleInput struct {
-	Value     any
+	Value     reflect.Value
 	Args      string
 	RuleName  string
 	FieldName string

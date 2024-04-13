@@ -46,9 +46,9 @@ func (e *EqRule[T]) EqNumber(ctx context.Context, input RuleFuncInput) error {
 // 版本：框架版本>=v2.2.0
 func (e *EqRule[T]) EqString(ctx context.Context, input RuleFuncInput) error {
 	thisVal := input.Value.String()
-	fieldVal := input.StructPtr.Field(e.AssocFieldIndex)
+	fieldVal := input.StructPtr.Field(e.AssocFieldIndex).String()
 
-	if fieldVal.String() == thisVal {
+	if fieldVal == thisVal {
 		return nil
 	}
 
@@ -66,9 +66,9 @@ func (e *EqRule[T]) EqString(ctx context.Context, input RuleFuncInput) error {
 // 版本：框架版本>=v2.2.0
 func (e *EqRule[T]) EqBool(ctx context.Context, input RuleFuncInput) error {
 	thisVal := input.Value.Bool()
-	fieldVal := input.StructPtr.Field(e.AssocFieldIndex)
+	fieldVal := input.StructPtr.Field(e.AssocFieldIndex).Bool()
 
-	if fieldVal.Bool() == thisVal {
+	if fieldVal == thisVal {
 		return nil
 	}
 
@@ -119,9 +119,9 @@ func (e *NotEqRule[T]) NotEqNumber(ctx context.Context, input RuleFuncInput) err
 // 示例：在用户注册时，提交密码Password和确认密码Password2必须相等（服务端校验）。
 func (e *NotEqRule[T]) NotEqString(ctx context.Context, input RuleFuncInput) error {
 	thisVal := input.Value.String()
-	fieldVal := input.StructPtr.Field(e.AssocFieldIndex)
+	fieldVal := input.StructPtr.Field(e.AssocFieldIndex).String()
 
-	if fieldVal.String() != thisVal {
+	if fieldVal != thisVal {
 		return nil
 	}
 
@@ -138,9 +138,9 @@ func (e *NotEqRule[T]) NotEqString(ctx context.Context, input RuleFuncInput) err
 // 示例：在用户注册时，提交密码Password和确认密码Password2必须相等（服务端校验）。
 func (e *NotEqRule[T]) NotEqBool(ctx context.Context, input RuleFuncInput) error {
 	thisVal := input.Value.Bool()
-	fieldVal := input.StructPtr.Field(e.AssocFieldIndex)
+	fieldVal := input.StructPtr.Field(e.AssocFieldIndex).Bool()
 
-	if fieldVal.Bool() != thisVal {
+	if fieldVal != thisVal {
 		return nil
 	}
 
