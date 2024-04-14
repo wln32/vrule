@@ -18,8 +18,8 @@ func getRequiredRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleim
 	// 指针
 	// slice map
 	// string
-	kind := f.typ.Kind()
-	return getRequiredWithFieldValidFunc(kind)
+
+	return getRequiredWithFieldValidFunc(f.typ)
 
 }
 
@@ -37,12 +37,12 @@ func getRequiredIfRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) rule
 		field, ok := s.typ.FieldByName(ruleVals[i])
 		if ok {
 			//fns[ruleVals[i]] = getRequiredFieldValue(field.Type.Kind(), ruleVals[i+1])
-			val := getRequiredFieldValue(field.Type.Kind(), ruleVals[i+1])
-			_, ok = val.(string)
+			val, isstring := getRequiredFieldValue(field.Type, ruleVals[i+1])
+
 			arg := ruleimpl.RequiredIfRuleArg{
 
 				AssocFieldIndex: int32(field.Index[0]),
-				IsString:        ok,
+				IsString:        isstring,
 				Value:           val,
 			}
 			args = append(args, arg)
@@ -52,7 +52,7 @@ func getRequiredIfRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) rule
 	}
 
 	return &ruleimpl.RequiredIfRule{
-		IsEmpty: getRequiredWithFieldValidFunc(f.typ.Kind()),
+		IsEmpty: getRequiredWithFieldValidFunc(f.typ),
 		// AssocFieldValues: fns,
 		AssocFields: args,
 	}
@@ -71,11 +71,11 @@ func getRequiredUnlessRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) 
 		field, ok := s.typ.FieldByName(ruleVals[i])
 		if ok {
 			// fns[ruleVals[i]] = getRequiredFieldValue(field.Type.Kind(), ruleVals[i+1])
-			val := getRequiredFieldValue(field.Type.Kind(), ruleVals[i+1])
-			_, ok := val.(string)
+			val, isstring := getRequiredFieldValue(field.Type, ruleVals[i+1])
+
 			args = append(args, ruleimpl.RequiredIfRuleArg{
 				AssocFieldIndex: int32(field.Index[0]),
-				IsString:        ok,
+				IsString:        isstring,
 				Value:           val,
 			})
 		} else {
@@ -84,7 +84,7 @@ func getRequiredUnlessRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) 
 	}
 
 	return &ruleimpl.RequiredUnlessRule{
-		IsEmpty: getRequiredWithFieldValidFunc(f.typ.Kind()),
+		IsEmpty: getRequiredWithFieldValidFunc(f.typ),
 		// AssocFieldValues: fns,
 		AssocFields: args,
 	}
@@ -99,7 +99,7 @@ func getRequiredWithRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ru
 	// 需要判断每个字段是什么类型，然后给RequiredFieldsRule 这个结构体传递一个required函数数组即可
 	ruleFunc := &ruleimpl.RequiredFieldsRule{
 		//AssocFieldValidFunc: getRequiredFuncs(s, ruleVals),
-		IsEmpty:     getRequiredWithFieldValidFunc(f.typ.Kind()),
+		IsEmpty:     getRequiredWithFieldValidFunc(f.typ),
 		AssocFields: getRequiredWithAssocFieldFuncs(s, ruleVals),
 	}
 
@@ -114,7 +114,7 @@ func getRequiredWithAllRuleFunc(s *StructRule, f *FieldRules, ruleVals []string)
 
 	ruleFunc := &ruleimpl.RequiredFieldsRule{
 		//AssocFieldValidFunc: getRequiredFuncs(s, ruleVals),
-		IsEmpty:     getRequiredWithFieldValidFunc(f.typ.Kind()),
+		IsEmpty:     getRequiredWithFieldValidFunc(f.typ),
 		AssocFields: getRequiredWithAssocFieldFuncs(s, ruleVals),
 	}
 
@@ -128,7 +128,7 @@ func getRequiredWithAllRuleFunc(s *StructRule, f *FieldRules, ruleVals []string)
 func getRequiredWithoutRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
 	ruleFunc := &ruleimpl.RequiredFieldsRule{
 		//AssocFieldValidFunc: getRequiredFuncs(s, ruleVals),
-		IsEmpty:     getRequiredWithFieldValidFunc(f.typ.Kind()),
+		IsEmpty:     getRequiredWithFieldValidFunc(f.typ),
 		AssocFields: getRequiredWithAssocFieldFuncs(s, ruleVals),
 	}
 	return ruleimpl.ValidFuncImpl(ruleFunc.RequiredWithout)
@@ -141,7 +141,7 @@ func getRequiredWithoutRuleFunc(s *StructRule, f *FieldRules, ruleVals []string)
 func getRequiredWithoutAllRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
 	ruleFunc := &ruleimpl.RequiredFieldsRule{
 		//AssocFieldValidFunc: getRequiredFuncs(s, ruleVals),
-		IsEmpty:     getRequiredWithFieldValidFunc(f.typ.Kind()),
+		IsEmpty:     getRequiredWithFieldValidFunc(f.typ),
 		AssocFields: getRequiredWithAssocFieldFuncs(s, ruleVals),
 	}
 	return ruleimpl.ValidFuncImpl(ruleFunc.RequiredWithoutAll)
@@ -156,7 +156,7 @@ func getRequiredFuncs(f *StructRule, assocFields []string) map[string]ruleimpl.V
 	for _, relatedFiled := range assocFields {
 		field, ok := f.typ.FieldByName(relatedFiled)
 		if ok {
-			funcs[field.Name] = getRequiredWithFieldValidFunc(field.Type.Kind())
+			funcs[field.Name] = getRequiredWithFieldValidFunc(field.Type)
 		}
 	}
 
@@ -171,7 +171,7 @@ func getRequiredWithAssocFieldFuncs(f *StructRule, assocFields []string) []rulei
 		if ok {
 			funcs = append(funcs, ruleimpl.RequiredWithRuleArg{
 				AssocFieldIndex:     field.Index[0],
-				AssocFieldValidFunc: getRequiredWithFieldValidFunc(field.Type.Kind()),
+				AssocFieldValidFunc: getRequiredWithFieldValidFunc(field.Type),
 			})
 		}
 	}
@@ -179,8 +179,8 @@ func getRequiredWithAssocFieldFuncs(f *StructRule, assocFields []string) []rulei
 	return funcs
 }
 
-func getRequiredWithFieldValidFunc(kind reflect.Kind) ruleimpl.ValidFunc {
-	switch kind {
+func getRequiredWithFieldValidFunc(typ reflect.Type) ruleimpl.ValidFunc {
+	switch typ.Kind() {
 	case reflect.Ptr:
 		return ruleimpl.ValidFuncImpl(ruleimpl.RequiredPtrFunc)
 	case reflect.Slice, reflect.Map, reflect.Array:
@@ -195,7 +195,7 @@ func getRequiredWithFieldValidFunc(kind reflect.Kind) ruleimpl.ValidFunc {
 
 	default:
 		// 只要不报错
-		getRequiredFieldValue(kind, "0")
+		getRequiredFieldValue(typ, "0")
 		return ruleimpl.ValidFuncImpl(func(ctx context.Context, input ruleimpl.RuleFuncInput) error {
 			return nil
 		})
@@ -210,46 +210,73 @@ func getRequiredWithFieldValidFunc(kind reflect.Kind) ruleimpl.ValidFunc {
 
 type requiredCmpFunc = func(field any, value any) bool
 
-func getRequiredFieldValue(kind reflect.Kind, val string) (a any) {
-
-	switch kind {
-	case reflect.Int:
-		a = gconv.Int(val)
-	case reflect.Int8:
-		a = gconv.Int8(val)
-	case reflect.Int16:
-		a = gconv.Int16(val)
-	case reflect.Int32:
-		a = gconv.Int32(val)
-	case reflect.Int64:
-		a = gconv.Int64(val)
-
-	case reflect.Uint:
-		a = gconv.Uint(val)
-	case reflect.Uint8:
-		a = gconv.Uint8(val)
-	case reflect.Uint16:
-		a = gconv.Uint16(val)
-	case reflect.Uint32:
-		a = gconv.Uint32(val)
-	case reflect.Uint64:
-		a = gconv.Uint64(val)
-
-	case reflect.Float32:
-		a = gconv.Float32(val)
-	case reflect.Float64:
-		a = gconv.Float64(val)
-
-	case reflect.String:
-		a = val
-		// case reflect.Struct: 需要修改后面T的泛型参数
-	case reflect.Bool:
-		a = gconv.Bool(val)
-
+// 主要是required-if，required-unless使用
+func getRequiredFieldValue(typ reflect.Type, val string) (a any, isstring bool) {
+	switch typ.String() {
+	case "int":
+		return gconv.Int(val), false
+	case "int8":
+		return gconv.Int8(val), false
+	case "int16":
+		return gconv.Int16(val), false
+	case "int32":
+		return gconv.Int32(val), false
+	case "int64":
+		return gconv.Int64(val), false
+	case "uint":
+		return gconv.Uint(val), false
+	case "uint8":
+		return gconv.Uint8(val), false
+	case "uint16":
+		return gconv.Uint16(val), false
+	case "uint32":
+		return gconv.Uint32(val), false
+	case "uint64":
+		return gconv.Uint64(val), false
+	case "float32":
+		return gconv.Float32(val), false
+	case "float64":
+		return gconv.Float64(val), false
+	case "bool":
+		return gconv.Bool(val), false
+	case "string":
+		return val, true
 	default:
+		// 如果不是基础类型
+		// 查看底层是否为基础类型
+		// 构造一个自定义的基础类型
+		v := reflect.New(typ)
 
-		panic(fmt.Errorf("getRequiredFieldValue: Unsupported parameter type: %s", kind))
+		switch typ.Kind() {
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+			v.Elem().SetInt(gconv.Int64(val))
+			a = v.Elem().Interface()
+			return
+
+		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+			v.Elem().SetUint(gconv.Uint64(val))
+			a = v.Elem().Interface()
+			return
+
+		case reflect.Float32, reflect.Float64:
+			v.Elem().SetFloat(gconv.Float64(val))
+			a = v.Elem().Interface()
+			return
+		case reflect.Bool:
+			v.Elem().SetBool(gconv.Bool(val))
+			a = v.Elem().Interface()
+			return
+		case reflect.String:
+			v.Elem().SetString(val)
+			a = v.Elem().Interface()
+			isstring = true
+			return
+		default:
+			panic(fmt.Errorf("getRequiredFieldValue: Unsupported parameter type: %s", typ))
+		}
+
 	}
-	return a
+
+	return
 
 }

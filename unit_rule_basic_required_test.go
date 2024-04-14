@@ -62,13 +62,17 @@ func Test_Required_Basic(t *testing.T) {
 
 func Test_RequiredIf_Basic(t *testing.T) {
 	type RequiredIfBasicStruct struct {
-		Int8    string `v:"required"`
+		Int8    int8
 		String2 string `v:"required-if:Int8,96"`
+
+		Int16   vInt16
+		String3 vString `v:"required-if:Int16,98"`
 	}
 
 	gtest.C(t, func(t *gtest.T) {
 		obj := &RequiredIfBasicStruct{
-			Int8: "96",
+			Int8:  96,
+			Int16: 97,
 		}
 
 		wants := map[string]string{
@@ -84,7 +88,7 @@ func Test_RequiredIf_Basic(t *testing.T) {
 	})
 	gtest.C(t, func(t *gtest.T) {
 		obj := &RequiredIfBasicStruct{
-			Int8:    "96",
+			Int8:    96,
 			String2: "1",
 		}
 
@@ -94,7 +98,7 @@ func Test_RequiredIf_Basic(t *testing.T) {
 	})
 	gtest.C(t, func(t *gtest.T) {
 		obj := &RequiredIfBasicStruct{
-			Int8: "9",
+			Int8: 9,
 		}
 
 		err := StructNotCache(obj).(*ValidationError).Errors()
@@ -106,13 +110,16 @@ func Test_RequiredIf_Basic(t *testing.T) {
 
 func Test_RequiredUnless_Basic(t *testing.T) {
 	type RequiredUnlessBasicStruct struct {
-		Int8    string `v:"required"`
+		Int8    int8
 		String2 string `v:"required-unless:Int8,96"`
+
+		Int16   vInt16
+		String3 string `v:"required-unless:Int16,0"`
 	}
 
 	gtest.C(t, func(t *gtest.T) {
 		obj := &RequiredUnlessBasicStruct{
-			Int8: "9",
+			Int8: 9,
 		}
 
 		wants := map[string]string{
@@ -127,7 +134,7 @@ func Test_RequiredUnless_Basic(t *testing.T) {
 	})
 	gtest.C(t, func(t *gtest.T) {
 		obj := &RequiredUnlessBasicStruct{
-			Int8:    "9",
+			Int8:    9,
 			String2: "1",
 		}
 
@@ -137,7 +144,7 @@ func Test_RequiredUnless_Basic(t *testing.T) {
 	})
 	gtest.C(t, func(t *gtest.T) {
 		obj := &RequiredUnlessBasicStruct{
-			Int8: "96",
+			Int8: 96,
 		}
 
 		err := StructNotCache(obj).(*ValidationError).Errors()
@@ -149,7 +156,7 @@ func Test_RequiredUnless_Basic(t *testing.T) {
 
 func Test_RequiredWith_Basic(t *testing.T) {
 	type RequiredWith_BasicStruct struct {
-		Int8 int8   `v:"required"`
+		Int8 int8
 		With string `v:"required-with:Int8"`
 	}
 
@@ -243,8 +250,8 @@ func Test_RequiredWith_Basic(t *testing.T) {
 
 func Test_RequiredWithAll_Basic(t *testing.T) {
 	type RequiredWithAll_BasicStruct struct {
-		Int8   int8 `v:"required"`
-		Bool   bool `v:"required"`
+		Int8   int8
+		Bool   bool
 		IntPtr *int8
 		With   string `v:"required-with-all:Int8,Bool,IntPtr"`
 	}
