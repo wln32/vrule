@@ -14,9 +14,9 @@ func (s *StructCache) AddStructRule(v *StructRule) {
 
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	_, ok := s.cache[v.longName]
+	_, ok := s.cache[v.LongName]
 	if !ok {
-		s.cache[v.longName] = v
+		s.cache[v.LongName] = v
 	}
 }
 func (s *StructCache) GetStructRule(typ reflect.Type) *StructRule {

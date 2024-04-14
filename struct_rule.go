@@ -7,39 +7,28 @@ import (
 )
 
 type StructRule struct {
-	ruleFields []*FieldRules
-	// longName = pkgpath + structName
-	longName string
-	// shortName = structName
-	shortName string
-	typ       reflect.Type
-}
-
-func (s *StructRule) StructType() reflect.Type {
-	return s.typ
-}
-
-func (s *StructRule) LongName() string {
-	return s.longName
-}
-func (s *StructRule) ShortName() string {
-	return s.shortName
+	RuleFields []*FieldRules
+	// LongName = pkgpath + structName
+	LongName string
+	// ShortName = structName
+	ShortName string
+	Type      reflect.Type
 }
 
 // 删除掉没有rule的字段
 func (f *StructRule) deleteEmptyRuleField() {
 
-	for i := 0; i < len(f.ruleFields); {
-		field := f.ruleFields[i]
+	for i := 0; i < len(f.RuleFields); {
+		field := f.RuleFields[i]
 		// 只能删除基础类型或者time类型，没有校验规则的字段
 		// 防止结构体里面有校验规则的字段就被删掉
-		if field.structFields != nil {
+		if field.StructRule != nil {
 			i++
 			continue
 		}
-		if len(field.ruleArray) == 0 {
+		if len(field.RuleArray) == 0 {
 
-			f.ruleFields = append(f.ruleFields[:i], f.ruleFields[i+1:]...)
+			f.RuleFields = append(f.RuleFields[:i], f.RuleFields[i+1:]...)
 
 		} else {
 			// 如果没删除，在自增
@@ -51,9 +40,9 @@ func (f *StructRule) deleteEmptyRuleField() {
 // 设置结构体所有字段的验证函数
 func (f *StructRule) setFieldsRuleValidFunc() {
 
-	for i := 0; i < len(f.ruleFields); i++ {
-		field := f.ruleFields[i]
-		if len(field.ruleArray) != 0 {
+	for i := 0; i < len(f.RuleFields); i++ {
+		field := f.RuleFields[i]
+		if len(field.RuleArray) != 0 {
 			f.setFieldRuleValidFunc(field)
 		}
 	}
@@ -64,7 +53,7 @@ func (f *StructRule) setFieldRuleValidFunc(fieldRule *FieldRules) {
 	if fieldRule.Funcs == nil {
 		fieldRule.Funcs = make(map[string]ruleimpl.ValidFunc)
 	}
-	for ruleName, ruleVals := range fieldRule.ruleArray {
+	for ruleName, ruleVals := range fieldRule.RuleArray {
 
 		registerFunc, ok := builtinRulesMapToFunc[ruleName]
 		if ok {
@@ -73,7 +62,7 @@ func (f *StructRule) setFieldRuleValidFunc(fieldRule *FieldRules) {
 			// 支持自定义规则
 			fn := getCustomValidRuleFunc(f, fieldRule, ruleName, ruleVals)
 			if fn == nil {
-				panicInvalidRuleError(f.longName, fieldRule.fieldName, ruleName)
+				panicInvalidRuleError(f.LongName, fieldRule.FieldName, ruleName)
 			}
 			// 绑定到验证的字段上
 			fieldRule.Funcs[ruleName] = fn
@@ -84,8 +73,8 @@ func (f *StructRule) setFieldRuleValidFunc(fieldRule *FieldRules) {
 // 设置关联的字段索引，
 func (f *StructRule) setIndexAssocFields() {
 
-	for i := 0; i < len(f.ruleFields); i++ {
-		field := f.ruleFields[i]
+	for i := 0; i < len(f.RuleFields); i++ {
+		field := f.RuleFields[i]
 		if len(field.requiredFields) != 0 {
 			f.setAssocFieldIndex(field)
 		}
@@ -96,7 +85,7 @@ func (f *StructRule) setIndexAssocFields() {
 // TODO: 放到具体的验证函数里面去取值
 func (f *StructRule) setAssocFieldIndex(fieldRule *FieldRules) {
 	requiredFields := fieldRule.requiredFields
-	typ, _ := isStructType(f.typ)
+	typ, _ := isStructType(f.Type)
 
 	if fieldRule.requiredFieldsIndex == nil {
 		fieldRule.requiredFieldsIndex = make(map[string]int)

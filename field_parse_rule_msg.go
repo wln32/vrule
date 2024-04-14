@@ -14,23 +14,23 @@ var defaultCtx = context.TODO()
 // return index
 // -1 =not found
 func (f *FieldRules) hasRule(rule string) (vals []string, ok bool) {
-	vals, ok = f.ruleArray[rule]
+	vals, ok = f.RuleArray[rule]
 	return
 }
 
 func (f *FieldRules) hasMsg(rule string) (msg string, ok bool) {
-	msg, ok = f.msgArray[rule]
+	msg, ok = f.MsgArray[rule]
 	return
 }
 
 // [属性别名@]校验规则[#错误提示]
 // 校验规则则为当前属性的校验规则，多个校验规则请使用|符号组合，例如：required|between:1,100
 func (f *FieldRules) parseRuleAndMsg(ruleString string, msg string, v *Validator) {
-	if f.ruleArray == nil {
-		f.ruleArray = make(map[string][]string)
+	if f.RuleArray == nil {
+		f.RuleArray = make(map[string][]string)
 	}
-	if f.msgArray == nil {
-		f.msgArray = make(map[string]string)
+	if f.MsgArray == nil {
+		f.MsgArray = make(map[string]string)
 	}
 
 	rules := strings.Split(ruleString, "|")
@@ -41,14 +41,14 @@ func (f *FieldRules) parseRuleAndMsg(ruleString string, msg string, v *Validator
 		}
 	}
 	// 如果没有rule，不需要下一步
-	if len(f.ruleArray) == 0 {
+	if len(f.RuleArray) == 0 {
 		return
 	}
 
 	ruleToMsgMap := map[string]string{}
 
 	// 设置默认的错误提示信息
-	for rule, _ := range f.ruleArray {
+	for rule, _ := range f.RuleArray {
 		// 如果是内置规则，直接添加
 		_, ok := isBuiltinRule(rule)
 		if ok {
@@ -112,7 +112,7 @@ func (f *FieldRules) addRule(rule string) {
 	index := strings.Index(rule, ":")
 
 	if index == -1 { // required json integer float之类的 没有参数
-		f.ruleArray[rule] = vals
+		f.RuleArray[rule] = vals
 		return
 	}
 	ruleName := rule[:index]
@@ -124,27 +124,27 @@ func (f *FieldRules) addRule(rule string) {
 		// 如果是正则表达式，直接添加
 		// regex : \\d{4,18} 正则表达式不需要split
 		if ruleName == ruleimpl.RegexRuleName || ruleName == ruleimpl.NotRegexRuleName {
-			f.ruleArray[ruleName] = []string{ruleVal}
+			f.RuleArray[ruleName] = []string{ruleVal}
 			return
 		}
 		//  日期之类的date-format: Y-m-d H:i:s
 		if strings.Contains(ruleName, "date") {
-			f.ruleArray[ruleName] = []string{ruleVal}
+			f.RuleArray[ruleName] = []string{ruleVal}
 			return
 		}
 		// 其他正常的参数
 		vals = strings.Split(ruleVal, ",")
-		f.ruleArray[ruleName] = vals
+		f.RuleArray[ruleName] = vals
 		return
 	}
 	// 如果是自定义规则
 	_, ok = isCustomRuleFunc(ruleName)
 	if ok {
 		args := rule[index+1:]
-		f.ruleArray[ruleName] = []string{args}
+		f.RuleArray[ruleName] = []string{args}
 		return
 	}
-	panicInvalidRuleError("", f.fieldName, ruleName)
+	panicInvalidRuleError("", f.FieldName, ruleName)
 
 }
 
@@ -157,10 +157,10 @@ func (f *FieldRules) addMsg(rule, msg string) {
 
 	if gstr.Contains(msg, "{") {
 		msg = gstr.ReplaceByMap(msg, map[string]string{
-			"{field}": f.name, // Field longName of the `value`.
+			"{field}": f.Name, // Field LongName of the `value`.
 		})
 
 	}
 	ruleName := strings.Split(rule, ":")[0]
-	f.msgArray[ruleName] = msg
+	f.MsgArray[ruleName] = msg
 }

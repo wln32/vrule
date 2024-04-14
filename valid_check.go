@@ -36,10 +36,10 @@ func (f *StructRule) checkStructByName(ctx context.Context, ptr any) error {
 
 	errors := Errors{}
 
-	for i := 0; i < len(f.ruleFields); i++ {
-		field := f.ruleFields[i]
+	for i := 0; i < len(f.RuleFields); i++ {
+		field := f.RuleFields[i]
 
-		fieldVal := structVal.FieldByName(field.fieldName)
+		fieldVal := structVal.FieldByName(field.FieldName)
 
 		err := field.checkStructField(ctx, fieldVal, structVal)
 
@@ -92,10 +92,10 @@ func (f *StructRule) checkStruct(ctx context.Context, a any) error {
 
 	errs := Errors{}
 
-	for i := 0; i < len(f.ruleFields); i++ {
-		field := f.ruleFields[i]
+	for i := 0; i < len(f.RuleFields); i++ {
+		field := f.RuleFields[i]
 
-		fieldVal := structVal.Field(field.fieldIndex)
+		fieldVal := structVal.Field(field.FieldIndex)
 
 		err := field.checkStructField(ctx, fieldVal, structVal)
 
@@ -119,14 +119,14 @@ func (f *FieldRules) checkStructField(ctx context.Context, fieldVal reflect.Valu
 	//}
 	// required Address
 	// 需要校验Orders 是否满足规则，
-	if len(f.ruleArray) != 0 {
+	if len(f.RuleArray) != 0 {
 		//var requiredData map[string]any
 		// 设置关联校验的字段
 		//if len(f.requiredFieldsIndex) != 0 {
 		//	requiredData = make(map[string]any, len(f.requiredFieldsIndex))
-		//	for name, index := range f.requiredFieldsIndex {
+		//	for Name, index := range f.requiredFieldsIndex {
 		//		requiredFieldVal := structPtr.Field(index)
-		//		requiredData[name] = requiredFieldVal.Interface()
+		//		requiredData[Name] = requiredFieldVal.Interface()
 		//	}
 		//}
 
@@ -176,7 +176,7 @@ func (f *FieldRules) checkStructField(ctx context.Context, fieldVal reflect.Valu
 			可以看到最后两个合并被合并到一个错误上了
 		*/
 		// TODO: 增加一个错误合并的
-		errs := f.structFields.checkStruct(ctx, fieldVal)
+		errs := f.StructRule.checkStruct(ctx, fieldVal)
 		return errs
 	}
 	return nil
@@ -187,7 +187,7 @@ func (f *FieldRules) checkSlice(ctx context.Context, arr reflect.Value) error {
 	// struct
 	for i := 0; i < arr.Len(); i++ {
 		item := arr.Index(i)
-		err := f.structFields.checkStruct(ctx, item)
+		err := f.StructRule.checkStruct(ctx, item)
 		if err != nil {
 			// bail
 			return err
@@ -203,7 +203,7 @@ func (f *FieldRules) checkMap(ctx context.Context, map_ reflect.Value) error {
 	// struct
 	for _, key := range mapKeys {
 		value := map_.MapIndex(key)
-		err := f.structFields.checkStruct(ctx, value)
+		err := f.StructRule.checkStruct(ctx, value)
 		if err != nil {
 			// bail
 			return err
@@ -224,7 +224,7 @@ func (f *FieldRules) checkBasic(ctx context.Context, val reflect.Value, StructPt
 			Value: val,
 
 			StructPtr: StructPtr,
-			Message:   f.msgArray[ruleName],
+			Message:   f.MsgArray[ruleName],
 		})
 		// bail
 		if err != nil {

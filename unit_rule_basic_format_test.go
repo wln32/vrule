@@ -110,7 +110,7 @@ func Test_Format_Json_Basic(t *testing.T) {
 	})
 	gtest.C(t, func(t *gtest.T) {
 		obj := &FormatJsonStruct{
-			Name1: `{"longName":1}`,
+			Name1: `{"LongName":1}`,
 		}
 
 		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()

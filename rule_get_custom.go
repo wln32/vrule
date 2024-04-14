@@ -16,8 +16,8 @@ func getCustomValidRuleFunc(s *StructRule, f *FieldRules, ruleName string, vals 
 	vfn := &ruleimpl.RegisterCustomRuleFunc{
 		Args:      vals[0],
 		RuleName:  ruleName,
-		FieldName: f.fieldName,
-		FieldType: f.typ,
+		FieldName: f.FieldName,
+		FieldType: f.Type,
 		Fn:        fn,
 	}
 

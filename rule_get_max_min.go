@@ -15,7 +15,7 @@ func getMaxRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Va
 	replaceRuleMsg_Max(f, ruleimpl.Max, ruleVals[0])
 	max := ruleVals[0]
 
-	switch f.typ.Kind() {
+	switch f.Type.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 
 		return &ruleimpl.MaxRuleNumber[int64]{
@@ -33,7 +33,7 @@ func getMaxRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Va
 			FieldConvertFunc: getFieldReflectConvert[float64](float64(1)),
 		}
 	default:
-		panicUnsupportedTypeError("get max rule func", f.typ)
+		panicUnsupportedTypeError("get max rule func", f.Type)
 	}
 
 	return nil
@@ -46,7 +46,7 @@ func getMinRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Va
 	replaceRuleMsg_Min(f, ruleimpl.Min, ruleVals[0])
 	min := ruleVals[0]
 
-	switch f.typ.Kind() {
+	switch f.Type.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 
 		return &ruleimpl.MinRuleNumber[int64]{
@@ -64,7 +64,7 @@ func getMinRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Va
 			FieldConvertFunc: getFieldReflectConvert[float64](float64(1)),
 		}
 	default:
-		panicUnsupportedTypeError("get min rule func", f.typ)
+		panicUnsupportedTypeError("get min rule func", f.Type)
 	}
 
 	return nil

@@ -93,7 +93,7 @@ func Test_Struct_With_EmbeddedObject(t *testing.T) {
 		}
 		type EmbeddedObject109 struct {
 			Id   int
-			Name string `valid:"longName@required#请输入您的姓名"`
+			Name string `valid:"LongName@required#请输入您的姓名"`
 			Embedded105
 		}
 		obj := &EmbeddedObject109{

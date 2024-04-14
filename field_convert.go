@@ -38,9 +38,9 @@ func getFieldReflectConvert[TO ruleimpl.Number](x any) func(reflect.Value) TO {
 // 获取结构体中fieldName的类型转换函数
 // 主要是cmp系列的规则
 func getAssocFieldTypeConvert[TO ruleimpl.Number](s *StructRule, fieldName string) func(value reflect.Value) TO {
-	field, ok := s.typ.FieldByName(fieldName)
+	field, ok := s.Type.FieldByName(fieldName)
 	if !ok {
-		panic(fmt.Errorf("structure: %s has no fields: %s", s.longName, fieldName))
+		panic(fmt.Errorf("structure: %s has no fields: %s", s.LongName, fieldName))
 	}
 
 	switch field.Type.Kind() {

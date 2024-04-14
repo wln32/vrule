@@ -21,7 +21,7 @@ var (
 	defaultCustomRuleMsg = "{field} does not satisfy the condition {customrule}"
 
 	customValidRuleFuncMap                  = map[string]ruleimpl.CustomValidRuleFunc{}
-	registerCustomRuleInvalidParameterError = fmt.Errorf("registered verification function or rule name cannot be empty")
+	registerCustomRuleInvalidParameterError = fmt.Errorf("registered verification function or rule Name cannot be empty")
 	registerCustomRuleExistsError           = "rule:`%s` you registered already exists and cannot be registered again"
 )
 
@@ -51,7 +51,7 @@ func RegisterCustomRuleFunc(option RegisterCustomRuleOption) error {
 }
 
 // 让用户自定义规则的解析函数
-func RegisterCustomRuleFuncWithParse(ruleName string, fn func(structRule *StructRule, fieldRule *FieldRules, args []string) ruleimpl.ValidFunc) error {
+func RegisterCustomRuleFuncWithParse(ruleName string, fn func(structRule StructRule, fieldRule FieldRules, args []string) ruleimpl.ValidFunc) error {
 
 	ruleName = strings.TrimSpace(ruleName)
 	// 无效的
@@ -70,7 +70,9 @@ func RegisterCustomRuleFuncWithParse(ruleName string, fn func(structRule *Struct
 	customFuncMutex.Lock()
 	defer customFuncMutex.Unlock()
 
-	builtinRulesMapToFunc[ruleName] = fn
+	builtinRulesMapToFunc[ruleName] = func(structRule *StructRule, fieldRule *FieldRules, s []string) ruleimpl.ValidFunc {
+		return fn(*structRule, *fieldRule, s)
+	}
 
 	return nil
 }

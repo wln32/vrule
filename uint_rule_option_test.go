@@ -9,7 +9,7 @@ import (
 
 func Test_Option_FieldName(t *testing.T) {
 	type OptionFieldName struct {
-		Name string `json:"name" v:"required"`
+		Name string `json:"Name" v:"required"`
 	}
 
 	gtest.C(t, func(t *gtest.T) {
@@ -25,7 +25,7 @@ func Test_Option_FieldName(t *testing.T) {
 
 		obj := &OptionFieldName{}
 		err := valid.StructNotCache(obj)
-		t.Assert(err, `The name field is required`)
+		t.Assert(err, `The Name field is required`)
 	})
 
 }

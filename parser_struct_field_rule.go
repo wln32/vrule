@@ -9,9 +9,9 @@ import (
 func (v *Validator) parseFieldRule(fieldName, tag string, structTyp, originalTyp reflect.Type, fieldIndex int, cache *StructCache) (*FieldRules, error) {
 
 	var f = &FieldRules{
-		typ:        originalTyp,
-		fieldName:  fieldName,
-		fieldIndex: fieldIndex,
+		Type:       originalTyp,
+		FieldName:  fieldName,
+		FieldIndex: fieldIndex,
 		kind:       BasicFiled,
 	}
 	if tag != "" {
@@ -27,7 +27,7 @@ func (v *Validator) parseFieldRule(fieldName, tag string, structTyp, originalTyp
 		if name == "" {
 			name = fieldName
 		}
-		f.name = name
+		f.Name = name
 		// 把rule 和msg 解析，以 | 号隔开
 		f.parseRuleAndMsg(rule, msg, v)
 		// 设置关联校验的字段
@@ -61,7 +61,7 @@ func (v *Validator) parseFieldRule(fieldName, tag string, structTyp, originalTyp
 			if err != nil {
 				return nil, err
 			}
-			f.structFields = v.ParseStruct(elemFieldTyp, cache)
+			f.StructRule = v.ParseStruct(elemFieldTyp, cache)
 		}
 	case reflect.Struct:
 		// 支持time gtime, time类型不在属于结构体类型，属于基本类型
@@ -88,7 +88,7 @@ func (v *Validator) parseFieldRule(fieldName, tag string, structTyp, originalTyp
 			if err != nil {
 				return nil, err
 			}
-			f.structFields = v.ParseStruct(elemFieldTyp, cache)
+			f.StructRule = v.ParseStruct(elemFieldTyp, cache)
 			f.kind = StructrField
 		}
 
@@ -146,10 +146,10 @@ func (v *Validator) ParseStruct(a any, cache *StructCache) *StructRule {
 	}
 
 	structRule := &StructRule{
-		ruleFields: make([]*FieldRules, 0, 4),
-		typ:        typ,
-		longName:   getStructName(typ),
-		shortName:  typ.String(),
+		RuleFields: make([]*FieldRules, 0, 4),
+		Type:       typ,
+		LongName:   getStructName(typ),
+		ShortName:  typ.String(),
 	}
 
 	var structTyp = typ
@@ -190,7 +190,7 @@ func (v *Validator) ParseStruct(a any, cache *StructCache) *StructRule {
 			}
 		}
 		/*
-			rule.fieldIndex = field.Field.Index[0]
+			rule.FieldIndex = field.Field.Index[0]
 			// 防止内嵌结果体的字段索引
 			type Pass struct {
 					Pass1 string `valid:"password1@required|same:password2#请输入您的密码|您两次输入的密码不一致"`
@@ -198,7 +198,7 @@ func (v *Validator) ParseStruct(a any, cache *StructCache) *StructRule {
 				}
 			type User struct {
 				Id   int
-				Name string `valid:"longName@required#请输入您的姓名"`
+				Name string `valid:"LongName@required#请输入您的姓名"`
 				Pass
 			}
 		*/
@@ -221,7 +221,7 @@ func (v *Validator) ParseStruct(a any, cache *StructCache) *StructRule {
 			}
 			// 不要忘记 如果时间类型的字段带有rule，就添加到ruleFields中去
 			if isTimeType(fieldTyp) && rule != nil {
-				structRule.ruleFields = append(structRule.ruleFields, rule)
+				structRule.RuleFields = append(structRule.RuleFields, rule)
 				continue
 			}
 
@@ -230,11 +230,11 @@ func (v *Validator) ParseStruct(a any, cache *StructCache) *StructRule {
 			if err != nil {
 				return nil
 			}
-			rule.structFields = v.ParseStruct(fieldTyp, cache)
+			rule.StructRule = v.ParseStruct(fieldTyp, cache)
 		}
 
 		if rule != nil {
-			structRule.ruleFields = append(structRule.ruleFields, rule)
+			structRule.RuleFields = append(structRule.RuleFields, rule)
 		}
 	}
 
@@ -254,7 +254,7 @@ func (v *Validator) ParseStruct(a any, cache *StructCache) *StructRule {
 	// 删除掉没有rules的字段,前面已经过滤掉无效的规则了，
 	structRule.deleteEmptyRuleField()
 
-	if len(structRule.ruleFields) != 0 {
+	if len(structRule.RuleFields) != 0 {
 		if cache != nil {
 			cache.AddStructRule(structRule)
 		}

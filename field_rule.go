@@ -25,34 +25,31 @@ const (
 )
 
 type FieldRules struct {
-	// v:"[longName@]ruleArray[#msg]"
-	name string
+	// v:"[LongName@]RuleArray[#msg]"
+	Name string
 
 	// 按 | 解析的rule和msg
 	// rule=>[value1,value2]   example: length:6,16 => length=>{6,16}
-	ruleArray map[string][]string
+	RuleArray map[string][]string
 	// rule=> msg
-	msgArray map[string]string
-	// bail 规则
-	bail bool
-	// foreach规则
+	MsgArray map[string]string
 
 	// 字段类型
-	typ reflect.Type
+	Type reflect.Type
 
-	fieldName string
+	FieldName string
 	// 字段在结构体中的索引，反射的时候直接根据索引获取
-	fieldIndex int
+	FieldIndex int
 
 	kind FieldKind
 
 	// fields 如果kind 是struct才有效，其他的无效
-	structFields *StructRule
+	StructRule *StructRule
 
 	// 关联校验的字段名，用于required-xxx以及比较系列规则
 	requiredFields []string
 	// 关联字段的名字=》索引，快速访问
-	// fieldName => filedIndex
+	// FieldName => filedIndex
 	requiredFieldsIndex map[string]int
 
 	// 指针类型 requiredPtr
@@ -66,11 +63,11 @@ func (f *FieldRules) removeInvalidTimeRule() {
 	deleteTimeRuleAndMsg := func(ruleName string) {
 		_, ok := f.hasRule(ruleName)
 		if ok {
-			delete(f.ruleArray, ruleName)
+			delete(f.RuleArray, ruleName)
 			// 错误提示也需要删除
 			_, ok := f.hasMsg(ruleName)
 			if ok {
-				delete(f.msgArray, ruleName)
+				delete(f.MsgArray, ruleName)
 			}
 		}
 	}
@@ -88,14 +85,14 @@ func (f *FieldRules) removeInvalidRules(typ reflect.Type) {
 		// 不处理
 	default:
 		// 如果是其他值类型，需要查看是否有required规则，如果有，直接去除验证
-		for ruleName, _ := range f.ruleArray {
+		for ruleName, _ := range f.RuleArray {
 			switch {
 			case strings.Contains(ruleName, "required"):
-				delete(f.ruleArray, ruleName)
+				delete(f.RuleArray, ruleName)
 				// 错误提示也需要删除
 				_, ok := f.hasMsg(ruleName)
 				if ok {
-					delete(f.msgArray, ruleName)
+					delete(f.MsgArray, ruleName)
 				}
 			}
 		}
@@ -125,7 +122,7 @@ func (f *FieldRules) setAssocFieldIndex(name string, index int) {
 // 如果依赖的是值类型的字段，可以把这个校验字段删掉，因为总是有值，这个在后面直接做了返回nil代表永远有值
 func (f *FieldRules) setAssocFields(structName string) {
 	var fields []string
-	for ruleName, ruleVals := range f.ruleArray {
+	for ruleName, ruleVals := range f.RuleArray {
 
 		index := strings.Index(ruleName, ruleimpl.Required)
 		if index != -1 {
@@ -146,5 +143,5 @@ func (f *FieldRules) setAssocFields(structName string) {
 }
 
 func (f *FieldRules) FieldType() reflect.Type {
-	return f.typ
+	return f.Type
 }

@@ -19,7 +19,7 @@ func getRequiredRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleim
 	// slice map
 	// string
 
-	return getRequiredWithFieldValidFunc(f.typ)
+	return getRequiredWithFieldValidFunc(f.Type)
 
 }
 
@@ -34,13 +34,12 @@ func getRequiredIfRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) rule
 	args := make([]ruleimpl.RequiredIfRuleArg, 0)
 
 	for i := 0; i < len(ruleVals); i += 2 {
-		field, ok := s.typ.FieldByName(ruleVals[i])
+		field, ok := s.Type.FieldByName(ruleVals[i])
 		if ok {
 			//fns[ruleVals[i]] = getRequiredFieldValue(field.Type.Kind(), ruleVals[i+1])
 			val, isstring := getRequiredFieldValue(field.Type, ruleVals[i+1])
 
 			arg := ruleimpl.RequiredIfRuleArg{
-
 				AssocFieldIndex: int32(field.Index[0]),
 				IsString:        isstring,
 				Value:           val,
@@ -52,7 +51,7 @@ func getRequiredIfRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) rule
 	}
 
 	return &ruleimpl.RequiredIfRule{
-		IsEmpty: getRequiredWithFieldValidFunc(f.typ),
+		IsEmpty: getRequiredWithFieldValidFunc(f.Type),
 		// AssocFieldValues: fns,
 		AssocFields: args,
 	}
@@ -68,7 +67,7 @@ func getRequiredUnlessRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) 
 	args := make([]ruleimpl.RequiredIfRuleArg, 0)
 
 	for i := 0; i < len(ruleVals); i += 2 {
-		field, ok := s.typ.FieldByName(ruleVals[i])
+		field, ok := s.Type.FieldByName(ruleVals[i])
 		if ok {
 			// fns[ruleVals[i]] = getRequiredFieldValue(field.Type.Kind(), ruleVals[i+1])
 			val, isstring := getRequiredFieldValue(field.Type, ruleVals[i+1])
@@ -84,7 +83,7 @@ func getRequiredUnlessRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) 
 	}
 
 	return &ruleimpl.RequiredUnlessRule{
-		IsEmpty: getRequiredWithFieldValidFunc(f.typ),
+		IsEmpty: getRequiredWithFieldValidFunc(f.Type),
 		// AssocFieldValues: fns,
 		AssocFields: args,
 	}
@@ -99,7 +98,7 @@ func getRequiredWithRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ru
 	// 需要判断每个字段是什么类型，然后给RequiredFieldsRule 这个结构体传递一个required函数数组即可
 	ruleFunc := &ruleimpl.RequiredFieldsRule{
 		//AssocFieldValidFunc: getRequiredFuncs(s, ruleVals),
-		IsEmpty:     getRequiredWithFieldValidFunc(f.typ),
+		IsEmpty:     getRequiredWithFieldValidFunc(f.Type),
 		AssocFields: getRequiredWithAssocFieldFuncs(s, ruleVals),
 	}
 
@@ -114,7 +113,7 @@ func getRequiredWithAllRuleFunc(s *StructRule, f *FieldRules, ruleVals []string)
 
 	ruleFunc := &ruleimpl.RequiredFieldsRule{
 		//AssocFieldValidFunc: getRequiredFuncs(s, ruleVals),
-		IsEmpty:     getRequiredWithFieldValidFunc(f.typ),
+		IsEmpty:     getRequiredWithFieldValidFunc(f.Type),
 		AssocFields: getRequiredWithAssocFieldFuncs(s, ruleVals),
 	}
 
@@ -128,7 +127,7 @@ func getRequiredWithAllRuleFunc(s *StructRule, f *FieldRules, ruleVals []string)
 func getRequiredWithoutRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
 	ruleFunc := &ruleimpl.RequiredFieldsRule{
 		//AssocFieldValidFunc: getRequiredFuncs(s, ruleVals),
-		IsEmpty:     getRequiredWithFieldValidFunc(f.typ),
+		IsEmpty:     getRequiredWithFieldValidFunc(f.Type),
 		AssocFields: getRequiredWithAssocFieldFuncs(s, ruleVals),
 	}
 	return ruleimpl.ValidFuncImpl(ruleFunc.RequiredWithout)
@@ -141,7 +140,7 @@ func getRequiredWithoutRuleFunc(s *StructRule, f *FieldRules, ruleVals []string)
 func getRequiredWithoutAllRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
 	ruleFunc := &ruleimpl.RequiredFieldsRule{
 		//AssocFieldValidFunc: getRequiredFuncs(s, ruleVals),
-		IsEmpty:     getRequiredWithFieldValidFunc(f.typ),
+		IsEmpty:     getRequiredWithFieldValidFunc(f.Type),
 		AssocFields: getRequiredWithAssocFieldFuncs(s, ruleVals),
 	}
 	return ruleimpl.ValidFuncImpl(ruleFunc.RequiredWithoutAll)
@@ -154,7 +153,7 @@ func getRequiredWithoutAllRuleFunc(s *StructRule, f *FieldRules, ruleVals []stri
 func getRequiredFuncs(f *StructRule, assocFields []string) map[string]ruleimpl.ValidFunc {
 	funcs := make(map[string]ruleimpl.ValidFunc, 0)
 	for _, relatedFiled := range assocFields {
-		field, ok := f.typ.FieldByName(relatedFiled)
+		field, ok := f.Type.FieldByName(relatedFiled)
 		if ok {
 			funcs[field.Name] = getRequiredWithFieldValidFunc(field.Type)
 		}
@@ -167,7 +166,7 @@ func getRequiredWithAssocFieldFuncs(f *StructRule, assocFields []string) []rulei
 
 	funcs := make([]ruleimpl.RequiredWithRuleArg, 0)
 	for _, assocField := range assocFields {
-		field, ok := f.typ.FieldByName(assocField)
+		field, ok := f.Type.FieldByName(assocField)
 		if ok {
 			funcs = append(funcs, ruleimpl.RequiredWithRuleArg{
 				AssocFieldIndex:     field.Index[0],

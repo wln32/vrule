@@ -31,7 +31,7 @@ func getDifferentRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) rulei
 // 版本：框架版本>=v2.2.0
 func getEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
 	replaceRuleMsg_Field1(f, ruleimpl.Eq, ruleVals[0])
-	switch f.typ.Kind() {
+	switch f.Type.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		vf := &ruleimpl.EqRule[float64]{
 			FieldName:             ruleVals[0],
@@ -58,9 +58,9 @@ func getEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 		}
 		return ruleimpl.ValidFuncImpl(vf.EqNumber)
 	case reflect.String:
-		field, ok := s.typ.FieldByName(ruleVals[0])
+		field, ok := s.Type.FieldByName(ruleVals[0])
 		if !ok {
-			panic(fmt.Errorf("structure: %s has no fields: %s", s.longName, ruleVals[0]))
+			panic(fmt.Errorf("structure: %s has no fields: %s", s.LongName, ruleVals[0]))
 		}
 		if field.Type.Kind() != reflect.String {
 			panicUnsupportedTypeError("get assoc field convert func", field.Type)
@@ -72,9 +72,9 @@ func getEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 		}
 		return ruleimpl.ValidFuncImpl(vf.EqString)
 	case reflect.Bool:
-		field, ok := s.typ.FieldByName(ruleVals[0])
+		field, ok := s.Type.FieldByName(ruleVals[0])
 		if !ok {
-			panic(fmt.Errorf("structure: %s has no fields: %s", s.longName, ruleVals[0]))
+			panic(fmt.Errorf("structure: %s has no fields: %s", s.LongName, ruleVals[0]))
 		}
 		if field.Type.Kind() != reflect.Bool {
 			panicUnsupportedTypeError("get assoc field convert func", field.Type)
@@ -85,7 +85,7 @@ func getEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 		}
 		return ruleimpl.ValidFuncImpl(vf.EqBool)
 	default:
-		panicUnsupportedTypeError("get eq rule func", f.typ)
+		panicUnsupportedTypeError("get eq rule func", f.Type)
 	}
 	return nil
 
@@ -96,7 +96,7 @@ func getEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 // 版本：框架版本>=v2.2.0
 func getNotEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
 	replaceRuleMsg_Field1(f, ruleimpl.NotEq, ruleVals[0])
-	switch f.typ.Kind() {
+	switch f.Type.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		vf := &ruleimpl.NotEqRule[float64]{
 			FieldName:             ruleVals[0],
@@ -135,7 +135,7 @@ func getNotEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.
 		return ruleimpl.ValidFuncImpl(vf.NotEqBool)
 
 	default:
-		panicUnsupportedTypeError("get not-eq rule func", f.typ)
+		panicUnsupportedTypeError("get not-eq rule func", f.Type)
 	}
 	return nil
 }
@@ -145,7 +145,7 @@ func getNotEqRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.
 // 版本：框架版本>=v2.2.0
 func getGtRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
 	replaceRuleMsg_Field1(f, ruleimpl.Gt, ruleVals[0])
-	switch f.typ.Kind() {
+	switch f.Type.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 
 		return &ruleimpl.GtRuleNumber[float64]{
@@ -169,7 +169,7 @@ func getGtRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 	default:
-		panicUnsupportedTypeError("get gt rule func", f.typ)
+		panicUnsupportedTypeError("get gt rule func", f.Type)
 	}
 
 	return nil
@@ -180,7 +180,7 @@ func getGtRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 // 版本：框架版本>=v2.2.0
 func getGteRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
 	replaceRuleMsg_Field1(f, ruleimpl.Gte, ruleVals[0])
-	switch f.typ.Kind() {
+	switch f.Type.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 
 		return &ruleimpl.GteRuleNumber[float64]{
@@ -204,7 +204,7 @@ func getGteRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Va
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 	default:
-		panicUnsupportedTypeError("get gte rule func", f.typ)
+		panicUnsupportedTypeError("get gte rule func", f.Type)
 	}
 
 	return nil
@@ -215,7 +215,7 @@ func getGteRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Va
 // 版本：框架版本>=v2.2.0
 func getLtRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
 	replaceRuleMsg_Field1(f, ruleimpl.Lt, ruleVals[0])
-	switch f.typ.Kind() {
+	switch f.Type.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 
 		return &ruleimpl.LtRuleNumber[float64]{
@@ -239,7 +239,7 @@ func getLtRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 	default:
-		panicUnsupportedTypeError("get lt rule func", f.typ)
+		panicUnsupportedTypeError("get lt rule func", f.Type)
 	}
 
 	return nil
@@ -250,7 +250,7 @@ func getLtRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 // 版本：框架版本>=v2.2.0
 func getLteRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
 	replaceRuleMsg_Field1(f, ruleimpl.Lte, ruleVals[0])
-	switch f.typ.Kind() {
+	switch f.Type.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 
 		return &ruleimpl.LteRuleNumber[float64]{
@@ -275,7 +275,7 @@ func getLteRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Va
 			AssocFieldIndex:       f.requiredFieldsIndex[ruleVals[0]],
 		}
 	default:
-		panicUnsupportedTypeError("get lte rule func", f.typ)
+		panicUnsupportedTypeError("get lte rule func", f.Type)
 	}
 
 	return nil

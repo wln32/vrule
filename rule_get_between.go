@@ -19,7 +19,7 @@ func getBetweenRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimp
 	min := ruleVals[0]
 	max := ruleVals[1]
 
-	switch f.typ.Kind() {
+	switch f.Type.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		return &ruleimpl.BetweenRuleNumber[int64]{
 			Min:              gconv.Int64(min),
@@ -40,7 +40,7 @@ func getBetweenRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimp
 		}
 
 	default:
-		panicUnsupportedTypeError("get between rule func", f.typ)
+		panicUnsupportedTypeError("get between rule func", f.Type)
 	}
 
 	return nil
@@ -50,35 +50,35 @@ func getBetweenRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimp
 // 说明：字段值应该在value1,value2,...中（字符串匹配）
 // in:value1,value2,value3
 // 参数类型支持数字类型和字符串，如果字符串带有空格，需要用引号包裹起来
-// TODO 支持字符串类型
+// TODO 支持字符串类型,布尔类型
 func getInRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
 	replaceRuleMsg_Pattern(f, ruleimpl.In, strings.Join(ruleVals, ","))
 	// 获取字段类型，把val转成和字段一样的类型
-	kind := f.typ.Kind()
+	kind := f.Type.Kind()
 	switch kind {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		arr := getNumberArray[int64](f.typ.Kind(), ruleVals)
+		arr := getNumberArray[int64](f.Type.Kind(), ruleVals)
 		ruleFunc := &ruleimpl.RangeRule[int64]{
 			Values:           arr,
 			FieldConvertFunc: getFieldReflectConvert[int64](int64(1)),
 		}
 		return ruleimpl.ValidFuncImpl(ruleFunc.In)
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		arr := getNumberArray[uint64](f.typ.Kind(), ruleVals)
+		arr := getNumberArray[uint64](f.Type.Kind(), ruleVals)
 		ruleFunc := &ruleimpl.RangeRule[uint64]{
 			Values:           arr,
 			FieldConvertFunc: getFieldReflectConvert[uint64](uint64(1)),
 		}
 		return ruleimpl.ValidFuncImpl(ruleFunc.In)
 	case reflect.Float32, reflect.Float64:
-		arr := getNumberArray[float64](f.typ.Kind(), ruleVals)
+		arr := getNumberArray[float64](f.Type.Kind(), ruleVals)
 		ruleFunc := &ruleimpl.RangeRule[float64]{
 			Values:           arr,
 			FieldConvertFunc: getFieldReflectConvert[float64](float64(1)),
 		}
 		return ruleimpl.ValidFuncImpl(ruleFunc.In)
 	default:
-		panicUnsupportedTypeError("get in rule func", f.typ)
+		panicUnsupportedTypeError("get in rule func", f.Type)
 	}
 	return nil
 }
@@ -87,27 +87,27 @@ func getInRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.Val
 // 说明：字段值不应该在value1,value2,...中（字符串匹配）。
 // not-in:value1,value2,value3
 // 参数类型支持数字类型和字符串，如果字符串带有空格，需要用引号包裹起来
-// TODO 支持字符串类型
+// TODO 支持字符串类型,布尔类型
 func getNotInRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
 	replaceRuleMsg_Pattern(f, ruleimpl.NotIn, strings.Join(ruleVals, ","))
-	kind := f.typ.Kind()
+	kind := f.Type.Kind()
 	switch kind {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		arr := getNumberArray[int64](f.typ.Kind(), ruleVals)
+		arr := getNumberArray[int64](f.Type.Kind(), ruleVals)
 		ruleFunc := &ruleimpl.RangeRule[int64]{
 			Values:           arr,
 			FieldConvertFunc: getFieldReflectConvert[int64](int64(1)),
 		}
 		return ruleimpl.ValidFuncImpl(ruleFunc.NotIn)
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		arr := getNumberArray[uint64](f.typ.Kind(), ruleVals)
+		arr := getNumberArray[uint64](f.Type.Kind(), ruleVals)
 		ruleFunc := &ruleimpl.RangeRule[uint64]{
 			Values:           arr,
 			FieldConvertFunc: getFieldReflectConvert[uint64](uint64(1)),
 		}
 		return ruleimpl.ValidFuncImpl(ruleFunc.NotIn)
 	case reflect.Float32, reflect.Float64:
-		arr := getNumberArray[float64](f.typ.Kind(), ruleVals)
+		arr := getNumberArray[float64](f.Type.Kind(), ruleVals)
 		ruleFunc := &ruleimpl.RangeRule[float64]{
 			Values:           arr,
 			FieldConvertFunc: getFieldReflectConvert[float64](float64(1)),
@@ -115,7 +115,7 @@ func getNotInRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleimpl.
 		return ruleimpl.ValidFuncImpl(ruleFunc.NotIn)
 
 	default:
-		panicUnsupportedTypeError("get not-in rule func", f.typ)
+		panicUnsupportedTypeError("get not-in rule func", f.Type)
 	}
 	return nil
 }

@@ -194,17 +194,17 @@ func (f *FieldRules) checkRequiredRulesIsValid(structName string, requiredRule s
 	case "required":
 		if len(ruleVals) > 0 {
 
-			panicRuleParameterWithMsgError(structName, f.fieldName, requiredRule, "without parameters", gconv.String(len(ruleVals)))
+			panicRuleParameterWithMsgError(structName, f.FieldName, requiredRule, "without parameters", gconv.String(len(ruleVals)))
 		}
 	case "required-if", "required-unless":
 		if len(ruleVals)%2 == 0 {
 			return ruleVals
 		}
 
-		panicRuleParameterWithMsgError(structName, f.fieldName, requiredRule, "The number of parameters must be a multiple of 2", gconv.String(len(ruleVals)))
+		panicRuleParameterWithMsgError(structName, f.FieldName, requiredRule, "The number of parameters must be a multiple of 2", gconv.String(len(ruleVals)))
 	case "required-with", "required-with-all", "required-with-out", "required-without-all":
 		if len(ruleVals) == 0 {
-			panicRuleParameterWithMsgError(structName, f.fieldName, requiredRule, "at least one", "0")
+			panicRuleParameterWithMsgError(structName, f.FieldName, requiredRule, "at least one", "0")
 		}
 		return ruleVals
 	}
@@ -229,12 +229,12 @@ same:field
 // 校验关联规则的参数是否正确
 func (f *FieldRules) checkAssocRulesIsValid(structName string, ruleName string, ruleVals []string) []string {
 	if len(ruleVals) > 1 {
-		panicRuleParameterError(structName, f.fieldName, ruleName, 1, len(ruleVals))
+		panicRuleParameterError(structName, f.FieldName, ruleName, 1, len(ruleVals))
 
 	}
 	_, ok := relatedRuleNameMap[ruleName]
 	if !ok {
-		panicInvalidRuleError(structName, f.fieldName, ruleName)
+		panicInvalidRuleError(structName, f.FieldName, ruleName)
 	}
 	switch ruleName {
 	case ruleimpl.Lte:

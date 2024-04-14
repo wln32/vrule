@@ -145,7 +145,7 @@ type ValidationError struct {
 	// 结构体名字
 	structName string
 
-	// key = fieldName
+	// key = FieldName
 	// err = SliceFieldError | MapFieldError | ValidationError(Struct) | BasicFieldError
 	fieldErrors map[string]error
 }

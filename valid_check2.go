@@ -10,7 +10,7 @@ import (
 func (s *StructRule) Valid(ctx context.Context, val reflect.Value, validOption ValidRuleOption) error {
 
 	// 做一些初始化的准备工作
-	verr := NewValidationError(s.shortName)
+	verr := NewValidationError(s.ShortName)
 
 	s.CheckStruct(ctx, val, verr, validOption)
 
@@ -48,9 +48,9 @@ func (s *StructRule) CheckStruct(ctx context.Context, structPtr reflect.Value,
 		return
 	}
 
-	for i := 0; i < len(s.ruleFields); i++ {
-		field := s.ruleFields[i]
-		fieldVal := structVal.Field(field.fieldIndex)
+	for i := 0; i < len(s.RuleFields); i++ {
+		field := s.RuleFields[i]
+		fieldVal := structVal.Field(field.FieldIndex)
 		ok = field.CheckStructField(ctx, fieldVal, structVal, verr, validOption)
 		if !ok {
 			return
@@ -76,19 +76,19 @@ func (f *FieldRules) CheckStructField(ctx context.Context, fieldVal reflect.Valu
 	// required Address
 	// 需要校验Orders 是否满足规则，
 	var ruleErrors BasicFieldError
-	if len(f.ruleArray) != 0 {
+	if len(f.RuleArray) != 0 {
 
 		for ruleName, fn := range f.Funcs {
 			err := fn.Run(ctx, ruleimpl.RuleFuncInput{
 				Value: fieldVal,
 
 				StructPtr: structPtr,
-				Message:   f.msgArray[ruleName],
+				Message:   f.MsgArray[ruleName],
 			})
 			if err != nil {
 				if ruleErrors.fieldErrors == nil {
 					ruleErrors = BasicFieldError{
-						fieldName:   f.fieldName,
+						fieldName:   f.FieldName,
 						fieldErrors: make(map[string]error),
 					}
 				}
@@ -108,7 +108,7 @@ func (f *FieldRules) CheckStructField(ctx context.Context, fieldVal reflect.Valu
 			verr.fieldErrors = make(map[string]error, 1)
 		}
 
-		verr.AddFieldError(f.fieldName, ruleErrors)
+		verr.AddFieldError(f.FieldName, ruleErrors)
 		// 遇到第一个错误，就退出，不继续校验后面的规则
 		if validOption.StopOnFirstError {
 			return false
@@ -137,7 +137,7 @@ func (f *FieldRules) CheckStructField(ctx context.Context, fieldVal reflect.Valu
 		for i := 0; i < arrLen; i++ {
 
 			item := fieldVal.Index(i)
-			f.structFields.CheckStruct(ctx, item, &sliceErrors[sliceErrIndex], validOption)
+			f.StructRule.CheckStruct(ctx, item, &sliceErrors[sliceErrIndex], validOption)
 			if sliceErrors[sliceErrIndex].fieldErrors != nil {
 
 				// 遇到第一个错误，就退出，不继续校验后面的规则
@@ -160,8 +160,8 @@ func (f *FieldRules) CheckStructField(ctx context.Context, fieldVal reflect.Valu
 				verr.fieldErrors = make(map[string]error, 1)
 			}
 
-			verr.AddFieldError(f.fieldName, SliceFieldError{
-				fieldName:   f.fieldName,
+			verr.AddFieldError(f.FieldName, SliceFieldError{
+				fieldName:   f.FieldName,
 				fieldErrors: sliceErrors,
 			})
 		}
@@ -175,7 +175,7 @@ func (f *FieldRules) CheckStructField(ctx context.Context, fieldVal reflect.Valu
 
 		mapIter := fieldVal.MapRange()
 		for mapIter.Next() {
-			f.structFields.CheckStruct(ctx, mapIter.Value(), &mapItemVerr, validOption)
+			f.StructRule.CheckStruct(ctx, mapIter.Value(), &mapItemVerr, validOption)
 			if mapItemVerr.fieldErrors != nil {
 				if mapErrors == nil {
 					// 延迟初始化
@@ -197,24 +197,24 @@ func (f *FieldRules) CheckStructField(ctx context.Context, fieldVal reflect.Valu
 				verr.fieldErrors = make(map[string]error, 1)
 			}
 
-			verr.AddFieldError(f.fieldName, MapFieldError{
-				fieldName:   f.fieldName,
+			verr.AddFieldError(f.FieldName, MapFieldError{
+				fieldName:   f.FieldName,
 				fieldErrors: mapErrors,
 			})
 		}
 		return whetherContinue
 	case StructrField:
 		structErrors := &ValidationError{
-			structName: f.fieldName,
+			structName: f.FieldName,
 		}
 		// TODO: 增加一个错误合并的
-		f.structFields.CheckStruct(ctx, fieldVal, structErrors, validOption)
+		f.StructRule.CheckStruct(ctx, fieldVal, structErrors, validOption)
 		if structErrors.fieldErrors != nil {
 			// 延迟初始化
 			if verr.fieldErrors == nil {
 				verr.fieldErrors = make(map[string]error, 1)
 			}
-			verr.AddFieldError(f.fieldName, structErrors)
+			verr.AddFieldError(f.FieldName, structErrors)
 			if validOption.StopOnFirstError {
 				whetherContinue = false
 				// whetherContinue = !validOption.Bail

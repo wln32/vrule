@@ -20,7 +20,7 @@ func Test_getStructFields(t *testing.T) {
 	}
 	type EmbeddedObject109 struct {
 		Id   int
-		Name string `valid:"longName@required#请输入您的姓名"`
+		Name string `valid:"LongName@required#请输入您的姓名"`
 		E    *Embedded105
 		Arr  []int
 		Arr2 []Embedded105Test_getStructFields
@@ -38,7 +38,7 @@ func Test_getStructFields(t *testing.T) {
 	var printStructfn func(typ reflect.Type)
 	var printFieldFn func(i int, field reflect.StructField)
 	printStructfn = func(typ reflect.Type) {
-		// t.Log("struct==", typ)
+		// t.Log("struct==", Type)
 		for i := 0; i < typ.NumField(); i++ {
 			printFieldFn(i, typ.Field(i))
 		}
