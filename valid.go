@@ -39,7 +39,7 @@ func New() *Validator {
 		},
 	}
 	var valid = &ValidRuleOption{
-		StopOnFirstError: true,
+		StopOnFirstError: false,
 	}
 
 	//i18n := gi18n.New(gi18n.Options{

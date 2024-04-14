@@ -16,7 +16,7 @@ vrule它具有以下功能：
 ---
 # 安装
 
-#### go版本要求 >= 1.18
+#### go版本要求 >=1.18
 
 #### 使用go get
 ```
@@ -32,8 +32,8 @@ import github.com/wln32/vrule
 
 ---
 # 基本使用
-vrule使用v或者valid来标记字段是否需要被校验</br>
-使用GetFieldError来获取对应字段的错误提示信息</br>
+vrule使用`v`或者`valid`来标记字段是否需要被校验</br>
+使用`GetFieldError`来获取对应字段的错误提示信息</br>
 #### 简单示例
 ```go
 type Basic struct {
@@ -51,7 +51,7 @@ fmt.Println(err.GetFieldError("Int"))
 ```
 
 #### required-without关联规则示例
-格式: required-without:field1,field2,... </br>
+格式: `required-without:field1,field2,...` </br>
 必需参数(当所给定任意字段值其中之一为空时)。当前字段必须有值</br>
 ```go
 type Foo struct {
@@ -101,32 +101,13 @@ err := RegisterCustomRuleFunc(RegisterCustomRuleOption{
 
 
 ---
-# 提取自定义的字段名
-可以根据字段的某些属性来过滤掉一些字段
-```go
-type OptionFieldName struct {
-	Name string `json:"name" v:"required"`
-}
-valid := New()
 
-valid.SetFieldNameFunc(func(_ reflect.Type, field reflect.StructField) string {
-    // 使用字段的json tag作为错误提示时的字段名{field}
-	name := field.Tag.Get("json")
-    if name == "" {
-        name = field.Name
-    }
-    return name
-})
-
-```
-
----
 
 ---
 # 过滤掉某些字段
-一般情况下我们需要过滤掉一些字段，可以使用SetFilterFieldFunc这个函数来实现<br>
-返回true代表需要被过滤<br>
-返回false代表需要被验证<br>
+一般情况下我们需要过滤掉一些字段，可以使用`SetFilterFieldFunc`这个函数来实现<br>
+返回`true`代表需要被过滤<br>
+返回`false`代表需要被验证<br>
 ```go
 valid := New()
 
@@ -142,25 +123,45 @@ valid.SetFilterFieldFunc(func(structType reflect.Type, field reflect.StructField
 ---
 
 # 只获取第一个错误
-vrule默认遇到第一个错误时停下</br>
-如果需要获取全部错误需要调用StopOnFirstError</br>
+vrule默认获取到全部的错误，不会在第一个错误时停下</br>
+如果需要第一个错误就返回需要调用`StopOnFirstError`</br>
 ```go
 valid := New()
-// 设置为false代表获取所有错误
-valid.StopOnFirstError(false)
-
+// 设置为true代表遇到第一个错误时就立即返回
+valid.StopOnFirstError(true)
 ```
 ---
 # 替换错误提示信息
-required = The {field} field is required</br>
-这是vrule的required规则错误提示模板</br>
-如果发生错误，vrule会将{field}替换为检验的字段名</br>
+`required = The {field} field is required`</br>
+这是vrule的`required`规则错误提示模板</br>
+如果发生错误，vrule会将`{field}`替换为检验的字段名</br>
+
+
 例如以下
 ```go
 type Basic struct {
-	String  string    `v:"required"`		
+	String  string    `json:"string" v:"required"`		
 }
 ```
+---
+#### 如果需要将{field}替换为别的内容，可以使用SetFieldNameFunc提取自定义的字段名
+
+```go
+
+valid := New()
+valid.SetFieldNameFunc(func(structType reflect.Type, field reflect.StructField) string {
+    // 使用字段的json tag作为错误提示时的字段名{field}
+	name := field.Tag.Get("json")
+    if name == "" {
+        name = field.Name
+    }
+    return name
+})
+
+```
+
+
+
 发生错误时，vrule会返回`The String field is required`这样的错误信息</br>
 除此之外，vrule还会替换以下的模板字段
 <ul>
@@ -176,10 +177,10 @@ type Basic struct {
 
 ---
 # 错误提示信息
-GetFieldError 基础类型，或者只要map或者slice的元素是基本类型就可以，例如map[k]int,[]int</br>
-GetStructFieldError 如果字段是struct类型</br>
-GetMapFieldError  如果map的v是struct类型，例如map[k]struct或者map[k]*struct</br>
-GetSliceFieldError 如果切片的元素是struct类型，例如[]struct,[]*struct</br>
+`GetFieldError` 基础类型，或者只要`map`或者`slice`的元素是基本类型就可以，例如`map[k]int,[]int`</br>
+`GetStructFieldError` 如果字段是`struct`类型</br>
+`GetMapFieldError`  如果map的v是`struct`类型，例如`map[k]struct或者map[k]*struct`</br>
+`GetSliceFieldError` 如果切片的元素是`struct`类型，例如`[]struct,[]*struct`</br>
 
 #### 简单示例
 ```go

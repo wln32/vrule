@@ -17,7 +17,7 @@ var testValid *Validator
 func getTestValid() *Validator {
 	if testValid == nil {
 		testValid = New()
-		testValid.StopOnFirstError(false)
+
 	}
 	return testValid
 }
