@@ -55,7 +55,8 @@ func RequiredStringLengthFunc(ctx context.Context, input RuleFuncInput) error {
 }
 
 type RequiredIfRuleArg struct {
-	AssocFieldIndex int
+	AssocFieldIndex int32
+	IsString        bool
 	Value           any
 }
 
@@ -72,15 +73,23 @@ type RequiredIfRule struct {
 
 // Run 格式: required-if:field,value,...
 // 说明：必需参数(当field=value时，当前字段必须有值)。多个字段以,号分隔。
+// 当前字段类型: 符合required规则即可
+// field类型：基础类型(数字类型，布尔类型，字符串类型)
+// value类型：必须是字面量类型，例如1 false hello，不能是变量
 func (r *RequiredIfRule) Run(ctx context.Context, input RuleFuncInput) error {
-
+	eq := false
 	for _, assocField := range r.AssocFields {
-		// TODO: 实现字段比较，当类型为string slice map 时不能直接比较
-		v := input.StructPtr.Field(assocField.AssocFieldIndex)
-
-		if v == assocField.Value {
+		// TODO: 实现字段比较，当类型为string  时不能直接比较
+		v := input.StructPtr.Field(int(assocField.AssocFieldIndex))
+		if assocField.IsString == false {
+			eq = v.Interface() == assocField.Value
+		} else {
+			eq = v.String() == assocField.Value.(string)
+		}
+		if eq {
 			return r.IsEmpty.Run(ctx, input)
 		}
+
 	}
 
 	return nil
@@ -100,11 +109,19 @@ type RequiredUnlessRule struct {
 
 // Run 格式: required-unless:field,value,...
 // 说明：必需参数(当field!=value时，当前字段必须有值)。多个字段以,号分隔。
+// 当前字段类型: 符合required规则即可
+// field类型：基础类型(数字类型，布尔类型，字符串类型)
+// value类型：必须是字面量类型，例如1 false hello，不能是变量
 func (r *RequiredUnlessRule) Run(ctx context.Context, input RuleFuncInput) error {
-
+	eq := true
 	for _, assocField := range r.AssocFields {
-		v := input.StructPtr.Field(assocField.AssocFieldIndex).Interface()
-		if v != assocField.Value {
+		v := input.StructPtr.Field(int(assocField.AssocFieldIndex))
+		if assocField.IsString == false {
+			eq = v.Interface() == assocField.Value
+		} else {
+			eq = v.String() == assocField.Value.(string)
+		}
+		if eq == false {
 			return r.IsEmpty.Run(ctx, input)
 		}
 	}

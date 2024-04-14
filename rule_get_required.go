@@ -3,8 +3,9 @@ package vrule
 import (
 	"context"
 	"fmt"
-	"github.com/wln32/vrule/ruleimpl"
 	"reflect"
+
+	"github.com/wln32/vrule/ruleimpl"
 
 	"github.com/gogf/gf/v2/util/gconv"
 )
@@ -25,7 +26,9 @@ func getRequiredRuleFunc(_ *StructRule, f *FieldRules, ruleVals []string) ruleim
 // RequiredIfFunc 格式: required-if:field,value,...
 // 说明：必需参数(当任意所给定字段值与所给值相等时，即：当field字段的值为value时，当前验证字段为必须参数)。多个字段以,号分隔。
 // 示例：当Gender字段为1时WifeName字段必须不为空， 当Gender字段为2时HusbandName字段必须不为空。
-// required-if: field1,value11,field2,value12,field3,value13,...
+// 当前字段类型: 符合required规则即可
+// field类型：基础类型(数字类型，布尔类型，字符串类型)
+// value类型：必须是字面量类型，例如1 false hello，不能是变量
 func getRequiredIfRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
 
 	args := make([]ruleimpl.RequiredIfRuleArg, 0)
@@ -34,10 +37,17 @@ func getRequiredIfRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) rule
 		field, ok := s.typ.FieldByName(ruleVals[i])
 		if ok {
 			//fns[ruleVals[i]] = getRequiredFieldValue(field.Type.Kind(), ruleVals[i+1])
-			args = append(args, ruleimpl.RequiredIfRuleArg{
-				AssocFieldIndex: field.Index[0],
-				Value:           getRequiredFieldValue(field.Type.Kind(), ruleVals[i+1]),
-			})
+			val := getRequiredFieldValue(field.Type.Kind(), ruleVals[i+1])
+			_, ok = val.(string)
+			arg := ruleimpl.RequiredIfRuleArg{
+
+				AssocFieldIndex: int32(field.Index[0]),
+				IsString:        ok,
+				Value:           val,
+			}
+			args = append(args, arg)
+		} else {
+			// 不存在的字段
 		}
 	}
 
@@ -51,7 +61,9 @@ func getRequiredIfRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) rule
 // 格式: required-unless:field,value,...
 // 说明：必需参数(当所给定字段值与所给值都不相等时，即：当field字段的值不为value时，当前验证字段为必须参数)。多个字段以,号分隔。
 // 示例：当Gender不等于0且Gender不等于2时，WifeName必须不为空；当Id 不等于0且 Gender 不等于2时， HusbandName 必须不为空。
-// required-unless: field1,value11,field2,value12,field3,value13,...
+// 当前字段类型: 符合required规则即可
+// field类型：基础类型(数字类型，布尔类型，字符串类型)
+// value类型：必须是字面量类型，例如1 false hello，不能是变量
 func getRequiredUnlessRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
 	args := make([]ruleimpl.RequiredIfRuleArg, 0)
 
@@ -59,10 +71,15 @@ func getRequiredUnlessRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) 
 		field, ok := s.typ.FieldByName(ruleVals[i])
 		if ok {
 			// fns[ruleVals[i]] = getRequiredFieldValue(field.Type.Kind(), ruleVals[i+1])
+			val := getRequiredFieldValue(field.Type.Kind(), ruleVals[i+1])
+			_, ok := val.(string)
 			args = append(args, ruleimpl.RequiredIfRuleArg{
-				AssocFieldIndex: field.Index[0],
-				Value:           getRequiredFieldValue(field.Type.Kind(), ruleVals[i+1]),
+				AssocFieldIndex: int32(field.Index[0]),
+				IsString:        ok,
+				Value:           val,
 			})
+		} else {
+			// 不存在的字段
 		}
 	}
 
@@ -169,8 +186,9 @@ func getRequiredWithFieldValidFunc(kind reflect.Kind) ruleimpl.ValidFunc {
 	case reflect.Slice, reflect.Map, reflect.Array:
 		return ruleimpl.ValidFuncImpl(ruleimpl.RequiredLengthFunc)
 	case reflect.String:
-		return ruleimpl.ValidFuncImpl(ruleimpl.RequiredStringLengthFunc)
+		return ruleimpl.ValidFuncImpl(ruleimpl.RequiredLengthFunc)
 	case reflect.Struct:
+		// struct值类型不生效
 		return ruleimpl.ValidFuncImpl(func(ctx context.Context, input ruleimpl.RuleFuncInput) error {
 			return nil
 		})
@@ -186,7 +204,6 @@ func getRequiredWithFieldValidFunc(kind reflect.Kind) ruleimpl.ValidFunc {
 		// 依赖的是值类型时，
 		// 直接把当前字段优化为required规则
 		// 可以减少一次函数调用，
-
 	}
 
 }
@@ -231,7 +248,7 @@ func getRequiredFieldValue(kind reflect.Kind, val string) (a any) {
 
 	default:
 
-		panic(fmt.Errorf("getRequiredCmpFunc: Unsupported parameter type: %s", kind))
+		panic(fmt.Errorf("getRequiredFieldValue: Unsupported parameter type: %s", kind))
 	}
 	return a
 
