@@ -23,7 +23,6 @@ func (s *StringSizeRule) Run(ctx context.Context, input RuleFuncInput) error {
 		if strings.Contains(input.Message, "{") {
 			input.Message = gstr.ReplaceByMap(input.Message, map[string]string{
 				"{value}": gconv.String(input.Value),
-				"{size}":  gconv.String(s.Size),
 			})
 			return fmt.Errorf(input.Message)
 		}
@@ -68,7 +67,6 @@ func (s *StringMinLengthRule) Run(ctx context.Context, input RuleFuncInput) erro
 		if strings.Contains(input.Message, "{") {
 			input.Message = gstr.ReplaceByMap(input.Message, map[string]string{
 				"{value}": gconv.String(input.Value),
-				"{min}":   gconv.String(s.Min),
 			})
 
 		}
@@ -89,7 +87,6 @@ func (s *StringMaxLengthRule) Run(ctx context.Context, input RuleFuncInput) erro
 		if strings.Contains(input.Message, "{") {
 			input.Message = gstr.ReplaceByMap(input.Message, map[string]string{
 				"{value}": gconv.String(input.Value),
-				"{max}":   gconv.String(s.Max),
 			})
 
 		}

@@ -9,9 +9,6 @@ type RuleFuncInput struct {
 	// this value
 	Value reflect.Value
 
-	// TODO： 错误消息处理器，使用+号拼接字符串
-	ErrorHandler func(error) error
-
 	Message string
 	// 关联字段的值
 	// AssocFieldValues map[string]any

@@ -54,14 +54,13 @@ func (f *FieldRules) parseRuleAndMsg(ruleString string, msg string, v *Validator
 		if ok {
 			errMsg := ""
 			if v.translationOption != nil {
-				// 如果用户设置了
+				// 如果用户自定义了
 				errMsg = v.translationOption.TranslateFunc(defaultCtx, rule)
-				if errMsg == "" {
-					// 如果没有，使用默认的错误提示
-					errMsg = v.i18n.Translate(defaultCtx, rule)
-				}
 			}
-
+			// 如果用户设置了i18n
+			if v.i18n != nil {
+				errMsg = v.i18n.Translate(defaultCtx, rule)
+			}
 			if errMsg == "" {
 				// 如果没有，使用默认的错误提示
 				errMsg = ruleimpl.RuleMsgMap[rule]
@@ -96,7 +95,7 @@ func (f *FieldRules) parseRuleAndMsg(ruleString string, msg string, v *Validator
 		}
 	}
 
-	// 最后一步，替换占位符中的值
+	// 最后一步，替换模板参数中的值  {field}
 	for ruleName, msg := range ruleToMsgMap {
 		f.addMsg(ruleName, msg)
 	}
@@ -142,9 +141,7 @@ func (f *FieldRules) addRule(rule string) {
 	_, ok = isCustomRuleFunc(ruleName)
 	if ok {
 		args := rule[index+1:]
-
 		f.ruleArray[ruleName] = []string{args}
-
 		return
 	}
 	panicInvalidRuleError("", f.fieldName, ruleName)
@@ -156,94 +153,14 @@ func (f *FieldRules) addRule(rule string) {
 // min的错误信息使用自定义的
 // `v:"between:1,10000 #project id must between {min}, {max}"`
 // 需要把min，max 替换成1 10000这种
-// TODO： i18n
 func (f *FieldRules) addMsg(rule, msg string) {
 
 	if gstr.Contains(msg, "{") {
 		msg = gstr.ReplaceByMap(msg, map[string]string{
 			"{field}": f.name, // Field longName of the `value`.
-			//"{value}":    需要再验证的时候再替换
-			//"{pattern}":    strings.Join(f.ruleArray[rule], ","), // 正则和not-in， in
-			//
-			//"{customrule}": rule, // 用户自定义的规则名
-
 		})
-		// msg = f.replaceMinMaxMsg(msg)
+
 	}
 	ruleName := strings.Split(rule, ":")[0]
 	f.msgArray[ruleName] = msg
-}
-
-func (f *FieldRules) hasMinAndMaxMsgWithRule() (int, bool) {
-	const (
-		Invalid = iota - 1
-		Between
-		Length
-		Max
-		Min
-	)
-	var hasMinAndMax = func(ruleName string) bool {
-		_, ok := f.hasRule(ruleName)
-		return ok
-	}
-	if hasMinAndMax(ruleimpl.Between) {
-		return Between, true
-	}
-	if hasMinAndMax(ruleimpl.Length) {
-		return Length, true
-	}
-	if hasMinAndMax(ruleimpl.Max) {
-		return Max, true
-	}
-	if hasMinAndMax(ruleimpl.Min) {
-		return Min, true
-	}
-	return 0, false
-}
-
-// 替换错误提示信息里面有{min}和{max}的信息
-func (f *FieldRules) replaceMinMaxMsg(msg string) string {
-	kind, ok := f.hasMinAndMaxMsgWithRule()
-	if !ok {
-		return msg
-	}
-	// n = 0 max min
-	const (
-		Between = iota
-		Length
-		Max
-		Min
-	)
-	switch kind {
-	case Max:
-		vals, _ := f.hasRule(ruleimpl.Max)
-		msg = gstr.ReplaceByMap(msg, map[string]string{
-			"{max}": vals[0],
-		})
-	case Min:
-		vals, _ := f.hasRule(ruleimpl.Min)
-		msg = gstr.ReplaceByMap(msg, map[string]string{
-			"{min}": vals[0],
-		})
-	case Between:
-		vals, _ := f.hasRule(ruleimpl.Between)
-		if len(vals) != 2 {
-			panicRuleParameterError("", f.name, ruleimpl.Between, 2, len(vals))
-		}
-		msg = gstr.ReplaceByMap(msg, map[string]string{
-			"{min}": vals[0],
-			"{max}": vals[1],
-		})
-	case Length:
-		vals, _ := f.hasRule(ruleimpl.Length)
-		if len(vals) != 2 {
-			panicRuleParameterError("", f.name, ruleimpl.Length, 2, len(vals))
-		}
-		msg = gstr.ReplaceByMap(msg, map[string]string{
-			"{min}": vals[0],
-			"{max}": vals[1],
-		})
-	}
-
-	return msg
 }

@@ -15,6 +15,7 @@ func Test_i18n(t *testing.T) {
 
 	gtest.C(t, func(t *gtest.T) {
 		valid := New()
+		valid.SetI18n(getI18nPath(), "")
 		valid.I18nSetLanguage("zh-CN")
 
 		obj := &TestI18nStruct{

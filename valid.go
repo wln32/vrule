@@ -42,10 +42,10 @@ func New() *Validator {
 		StopOnFirstError: false,
 	}
 
-	i18n := gi18n.New(gi18n.Options{
-		Path:     getI18nPath(),
-		Language: "en",
-	})
+	//i18n := gi18n.New(gi18n.Options{
+	//	Path:     getI18nPath(),
+	//	Language: "en",
+	//})
 
 	var trans = &TranslationOption{
 		TranslateFunc: func(ctx context.Context, content string) string {
@@ -53,13 +53,21 @@ func New() *Validator {
 		},
 	}
 
-	v.i18n = i18n
+	// v.i18n = i18n
 	v.cache = cache
 	v.parseRuleOption = parse
 	v.validRuleOption = valid
 	v.translationOption = trans
 
 	return v
+}
+
+func (v *Validator) SetI18n(path string, language string) {
+	i18n := gi18n.New(gi18n.Options{
+		Path:     path,
+		Language: language,
+	})
+	v.i18n = i18n
 }
 
 func (v *Validator) Struct(a any) error {

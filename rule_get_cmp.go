@@ -14,6 +14,7 @@ import (
 // 说明：参数值必需与field字段参数的值相同。
 // 示例：在用户注册时，提交密码Password和确认密码Password2必须相等（服务端校验）。
 func getSameRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
+	replaceRuleMsg_Field1(f, ruleimpl.Same, ruleVals[0])
 	return getEqRuleFunc(s, f, ruleVals)
 }
 
@@ -21,6 +22,7 @@ func getSameRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.V
 // 说明：参数值不能与field字段参数的值相同。
 // 示例：备用邮箱OtherMailAddr和邮箱地址MailAddr必须不相同。
 func getDifferentRuleFunc(s *StructRule, f *FieldRules, ruleVals []string) ruleimpl.ValidFunc {
+	replaceRuleMsg_Field1(f, ruleimpl.Different, ruleVals[0])
 	return getNotEqRuleFunc(s, f, ruleVals)
 }
 

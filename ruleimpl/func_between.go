@@ -2,7 +2,7 @@ package ruleimpl
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"reflect"
 	"strings"
 
@@ -18,7 +18,6 @@ type BetweenRuleNumber[T Number] struct {
 	FieldConvertFunc func(from reflect.Value) T
 }
 
-// 比如 Run(ctx context.Context, input ...any) error
 // 这里的input按照顺序就是min，max，其他规则同理
 // 格式: between:min,max
 // 说明：参数大小为min到max(支持整形和浮点类型参数)。
@@ -26,11 +25,10 @@ func (b *BetweenRuleNumber[T]) Run(ctx context.Context, input RuleFuncInput) err
 	val := b.FieldConvertFunc(input.Value)
 
 	if val < b.Min || val > b.Max {
-
 		if strings.Contains(input.Message, "{value}") {
-			input.Message = strings.Replace(input.Message, "{value}", gconv.String(val), 1)
+			input.Message = strings.ReplaceAll(input.Message, "{value}", gconv.String(val))
 		}
-		return fmt.Errorf(input.Message)
+		return errors.New(input.Message)
 	}
 	return nil
 }
@@ -54,9 +52,10 @@ func (r *RangeRule[T]) In(ctx context.Context, input RuleFuncInput) error {
 		}
 	}
 	if strings.Contains(input.Message, "{value}") {
-		input.Message = strings.Replace(input.Message, "{value}", gconv.String(val), 1)
+		input.Message = strings.ReplaceAll(input.Message, "{value}", gconv.String(val))
 	}
-	return fmt.Errorf(input.Message)
+	return errors.New(input.Message)
+
 }
 
 // 格式: not-in:value1,value2,...
@@ -66,9 +65,9 @@ func (r *RangeRule[T]) NotIn(ctx context.Context, input RuleFuncInput) error {
 	for i := 0; i < len(r.Values); i++ {
 		if r.Values[i] == val {
 			if strings.Contains(input.Message, "{value}") {
-				input.Message = strings.Replace(input.Message, "{value}", gconv.String(val), 1)
+				input.Message = strings.ReplaceAll(input.Message, "{value}", gconv.String(val))
 			}
-			return fmt.Errorf(input.Message)
+			return errors.New(input.Message)
 		}
 	}
 	return nil

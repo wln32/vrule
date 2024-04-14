@@ -70,12 +70,14 @@ type RequiredIfRule struct {
 	AssocFields []RequiredIfRuleArg
 }
 
-// Run RequiredIfFunc 格式: required-if:field,value,...
+// Run 格式: required-if:field,value,...
 // 说明：必需参数(当field=value时，当前字段必须有值)。多个字段以,号分隔。
 func (r *RequiredIfRule) Run(ctx context.Context, input RuleFuncInput) error {
 
 	for _, assocField := range r.AssocFields {
-		v := input.StructPtr.Field(assocField.AssocFieldIndex).Interface()
+		// TODO: 实现字段比较，当类型为string slice map 时不能直接比较
+		v := input.StructPtr.Field(assocField.AssocFieldIndex)
+
 		if v == assocField.Value {
 			return r.IsEmpty.Run(ctx, input)
 		}

@@ -64,3 +64,21 @@ func Test_getStructFields(t *testing.T) {
 	}
 
 }
+
+func Test_ParseErrorMsg(t *testing.T) {
+	msg1 := "The {field} value `{value}` must be after field {field1} value `{value1}`"
+	handler := parseErrorMsg(msg1)
+	t.Logf("%T\n", handler)
+
+	msg2 := "The {field} value `{value}` must be after field {field1} value "
+	handler = parseErrorMsg(msg2)
+	t.Logf("%T\n", handler)
+
+	msg3 := "The {field} value must be after field {field1} value `{value1}`"
+	handler = parseErrorMsg(msg3)
+	t.Logf("%T\n", handler)
+
+	msg4 := "The {field} value  must be after field {field1} value "
+	handler = parseErrorMsg(msg4)
+	t.Logf("%T\n", handler)
+}

@@ -27,7 +27,6 @@ func (b *MaxRuleNumber[T]) Run(ctx context.Context, input RuleFuncInput) error {
 			input.Message = gstr.ReplaceByMap(input.Message, map[string]string{
 				"{value}": gconv.String(val),
 			})
-
 		}
 		return errors.New(input.Message)
 	}
@@ -49,7 +48,6 @@ func (b *MinRuleNumber[T]) Run(ctx context.Context, input RuleFuncInput) error {
 	if val < b.Min {
 		if strings.Contains(input.Message, "{value}") {
 			input.Message = strings.Replace(input.Message, "{value}", gconv.String(val), 1)
-
 		}
 		return errors.New(input.Message)
 	}

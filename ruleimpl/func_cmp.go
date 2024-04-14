@@ -2,7 +2,7 @@ package ruleimpl
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"reflect"
 
 	"github.com/gogf/gf/v2/text/gstr"
@@ -34,10 +34,9 @@ func (e *EqRule[T]) EqNumber(ctx context.Context, input RuleFuncInput) error {
 
 	input.Message = gstr.ReplaceByMap(input.Message, map[string]string{
 		"{value}":  gconv.String(thisVal),
-		"{field1}": e.FieldName,
 		"{value1}": gconv.String(fieldVal),
 	})
-	return fmt.Errorf(input.Message)
+	return errors.New(input.Message)
 
 }
 
@@ -54,10 +53,9 @@ func (e *EqRule[T]) EqString(ctx context.Context, input RuleFuncInput) error {
 
 	input.Message = gstr.ReplaceByMap(input.Message, map[string]string{
 		"{value}":  gconv.String(thisVal),
-		"{field1}": e.FieldName,
 		"{value1}": gconv.String(fieldVal),
 	})
-	return fmt.Errorf(input.Message)
+	return errors.New(input.Message)
 
 }
 
@@ -74,10 +72,9 @@ func (e *EqRule[T]) EqBool(ctx context.Context, input RuleFuncInput) error {
 
 	input.Message = gstr.ReplaceByMap(input.Message, map[string]string{
 		"{value}":  gconv.String(thisVal),
-		"{field1}": e.FieldName,
 		"{value1}": gconv.String(fieldVal),
 	})
-	return fmt.Errorf(input.Message)
+	return errors.New(input.Message)
 
 }
 
@@ -108,10 +105,9 @@ func (e *NotEqRule[T]) NotEqNumber(ctx context.Context, input RuleFuncInput) err
 
 	input.Message = gstr.ReplaceByMap(input.Message, map[string]string{
 		"{value}":  gconv.String(thisVal),
-		"{field1}": e.FieldName,
 		"{value1}": gconv.String(fieldVal),
 	})
-	return fmt.Errorf(input.Message)
+	return errors.New(input.Message)
 }
 
 // 格式: same:field
@@ -127,10 +123,9 @@ func (e *NotEqRule[T]) NotEqString(ctx context.Context, input RuleFuncInput) err
 
 	input.Message = gstr.ReplaceByMap(input.Message, map[string]string{
 		"{value}":  gconv.String(thisVal),
-		"{field1}": e.FieldName,
 		"{value1}": gconv.String(fieldVal),
 	})
-	return fmt.Errorf(input.Message)
+	return errors.New(input.Message)
 }
 
 // 格式: same:field
@@ -146,10 +141,9 @@ func (e *NotEqRule[T]) NotEqBool(ctx context.Context, input RuleFuncInput) error
 
 	input.Message = gstr.ReplaceByMap(input.Message, map[string]string{
 		"{value}":  gconv.String(thisVal),
-		"{field1}": e.FieldName,
 		"{value1}": gconv.String(fieldVal),
 	})
-	return fmt.Errorf(input.Message)
+	return errors.New(input.Message)
 }
 
 type GtRuleNumber[T Number] struct {
@@ -177,10 +171,9 @@ func (g *GtRuleNumber[T]) Run(ctx context.Context, input RuleFuncInput) error {
 
 	input.Message = gstr.ReplaceByMap(input.Message, map[string]string{
 		"{value}":  gconv.String(thisVal),
-		"{field1}": g.FieldName,
 		"{value1}": gconv.String(fieldVal),
 	})
-	return fmt.Errorf(input.Message)
+	return errors.New(input.Message)
 }
 
 type GteRuleNumber[T Number] struct {
@@ -207,10 +200,9 @@ func (g *GteRuleNumber[T]) Run(ctx context.Context, input RuleFuncInput) error {
 
 	input.Message = gstr.ReplaceByMap(input.Message, map[string]string{
 		"{value}":  gconv.String(thisVal),
-		"{field1}": g.FieldName,
 		"{value1}": gconv.String(fieldVal),
 	})
-	return fmt.Errorf(input.Message)
+	return errors.New(input.Message)
 }
 
 type LtRuleNumber[T Number] struct {
@@ -237,10 +229,9 @@ func (g *LtRuleNumber[T]) Run(ctx context.Context, input RuleFuncInput) error {
 
 	input.Message = gstr.ReplaceByMap(input.Message, map[string]string{
 		"{value}":  gconv.String(thisVal),
-		"{field1}": g.FieldName,
 		"{value1}": gconv.String(fieldVal),
 	})
-	return fmt.Errorf(input.Message)
+	return errors.New(input.Message)
 }
 
 type LteRuleNumber[T Number] struct {
@@ -266,8 +257,7 @@ func (g *LteRuleNumber[T]) Run(ctx context.Context, input RuleFuncInput) error {
 	}
 	input.Message = gstr.ReplaceByMap(input.Message, map[string]string{
 		"{value}":  gconv.String(thisVal),
-		"{field1}": g.FieldName,
 		"{value1}": gconv.String(fieldVal),
 	})
-	return fmt.Errorf(input.Message)
+	return errors.New(input.Message)
 }

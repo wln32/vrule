@@ -23,10 +23,11 @@ var RuleMsgMap = map[string]string{
 	Eq:        "The {field} value `{value}` must be equal to field {field1} value `{value1}`",
 	Different: "The {field} value `{value}` must be different from field {field1} value `{value1}`",
 	Same:      "The {field} value `{value}` must be the same as field {field1} value `{value1}`",
-	Max:       "The {field} value `{value}` must be equal or lesser than {max}",
-	Min:       "The {field} value `{value}` must be equal or greater than {min}",
-	In:        "The {field} value `{value}` is not in acceptable range: {pattern}",
-	NotIn:     "The {field} value `{value}` must not be in range: {pattern}",
+
+	Max:   "The {field} value `{value}` must be equal or lesser than {max}",
+	Min:   "The {field} value `{value}` must be equal or greater than {min}",
+	In:    "The {field} value `{value}` is not in acceptable range: {pattern}",
+	NotIn: "The {field} value `{value}` must not be in range: {pattern}",
 
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	RegexDomain: "The {field} value `{value}` is not a valid domain format",

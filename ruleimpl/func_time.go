@@ -81,7 +81,6 @@ func (t *TimeRule) AfterEqual(ctx context.Context, input RuleFuncInput) error {
 
 	return errors.New(gstr.ReplaceByMap(input.Message, map[string]string{
 		"{value}":  valueTime.String(),
-		"{field1}": t.FieldName,
 		"{value1}": afterTime.String(),
 	}))
 }
