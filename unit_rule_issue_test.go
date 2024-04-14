@@ -30,7 +30,7 @@ func Test_Issue2503(t *testing.T) {
 		foo := &Foo{
 			Bar: &Bar{BarKey: "value"},
 		}
-		err := StructNotCache(foo)
+		err := getTestValid().StructNotCache(foo)
 		t.Assert(err, nil)
 	})
 }
@@ -49,7 +49,7 @@ func Test_Issue1983_1(t *testing.T) {
 		var (
 			teacher = Teacher60{}
 		)
-		err := StructNotCache(teacher)
+		err := getTestValid().StructNotCache(teacher)
 		t.AssertNE(err, nil)
 	})
 
@@ -66,7 +66,7 @@ func TestIssue_1983_2(t *testing.T) {
 		var (
 			teacher = Teacher78{}
 		)
-		err := StructNotCache(teacher)
+		err := getTestValid().StructNotCache(teacher)
 		t.Assert(err, nil)
 	})
 }
@@ -91,7 +91,7 @@ func TestIssue_1983_3(t *testing.T) {
 			//	"students": nil,
 			//}
 		)
-		err := StructNotCache(teacher)
+		err := getTestValid().StructNotCache(teacher)
 		t.Assert(err, nil)
 	})
 }
@@ -113,7 +113,7 @@ func Test_Issue1921(t *testing.T) {
 				},
 			}
 		)
-		err := StructNotCache(req)
+		err := getTestValid().StructNotCache(req)
 		t.Assert(err, "The Size value `10000` must be equal or lesser than 100")
 	})
 }
@@ -135,7 +135,7 @@ func Test_Issue2011(t *testing.T) {
 				},
 			}
 		)
-		err := StructNotCache(teacher)
+		err := getTestValid().StructNotCache(teacher)
 		t.Assert(err, "The Name value `john` length must be equal or greater than 6")
 	})
 }

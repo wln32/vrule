@@ -31,7 +31,7 @@ func Test_Required_Basic(t *testing.T) {
 			"IntMap":   "The IntMap field is required",
 		}
 
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 		for i := 0; i < 100; i++ {
 			for rule, msg := range wants {
 				fieldError := err.GetFieldError(rule)
@@ -52,7 +52,7 @@ func Test_Required_Basic(t *testing.T) {
 				2: "world",
 			},
 		}
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 
 		t.Assert(err, nil)
 
@@ -78,7 +78,7 @@ func Test_RequiredIf_Basic(t *testing.T) {
 		wants := map[string]string{
 			"String2": "The String2 field is required",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -92,7 +92,7 @@ func Test_RequiredIf_Basic(t *testing.T) {
 			String2: "1",
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 
 	})
@@ -101,7 +101,7 @@ func Test_RequiredIf_Basic(t *testing.T) {
 			Int8: 9,
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 
 	})
@@ -125,7 +125,7 @@ func Test_RequiredUnless_Basic(t *testing.T) {
 		wants := map[string]string{
 			"String2": "The String2 field is required",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -138,7 +138,7 @@ func Test_RequiredUnless_Basic(t *testing.T) {
 			String2: "1",
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 
 	})
@@ -147,7 +147,7 @@ func Test_RequiredUnless_Basic(t *testing.T) {
 			Int8: 96,
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 
 	})
@@ -167,7 +167,7 @@ func Test_RequiredWith_Basic(t *testing.T) {
 			"With": "The With field is required",
 		}
 		_ = wants
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -179,7 +179,7 @@ func Test_RequiredWith_Basic(t *testing.T) {
 			With: "1",
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 
@@ -198,7 +198,7 @@ func Test_RequiredWith_Basic(t *testing.T) {
 		wants := map[string]string{
 			"Nickname": `The Nickname field is required`,
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -225,7 +225,7 @@ func Test_RequiredWith_Basic(t *testing.T) {
 			"EndTime":  `The EndTime field is required`,
 		}
 
-		err := StructNotCache(data).(*ValidationError)
+		err := getTestValid().StructNotCache(data).(*ValidationError)
 		for rule, msg := range wants {
 			t.Assert(err.GetFieldError(rule), msg)
 		}
@@ -240,7 +240,7 @@ func Test_RequiredWith_Basic(t *testing.T) {
 		data := UserApiSearch271{
 			Uid: 1,
 		}
-		err := StructNotCache(data)
+		err := getTestValid().StructNotCache(data)
 
 		t.Assert(err, `The Nickname field is required`)
 
@@ -264,7 +264,7 @@ func Test_RequiredWithAll_Basic(t *testing.T) {
 		wants := map[string]string{
 			"With": "The With field is required",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -277,7 +277,7 @@ func Test_RequiredWithAll_Basic(t *testing.T) {
 			With:   "1",
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 
@@ -297,7 +297,7 @@ func Test_RequiredWithout_Basic(t *testing.T) {
 			"Without": `The Without field is required`,
 		}
 
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -310,7 +310,7 @@ func Test_RequiredWithout_Basic(t *testing.T) {
 			Without: "with-out",
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 	gtest.C(t, func(t *gtest.T) {
@@ -318,7 +318,7 @@ func Test_RequiredWithout_Basic(t *testing.T) {
 			String: "1",
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 
@@ -336,7 +336,7 @@ func Test_RequiredWithoutAll_Basic(t *testing.T) {
 		wants := map[string]string{
 			"WithoutAll": `The WithoutAll field is required`,
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -348,7 +348,7 @@ func Test_RequiredWithoutAll_Basic(t *testing.T) {
 			String: "1",
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 

@@ -25,7 +25,7 @@ func Test_Slice_Rec(t *testing.T) {
 			},
 		}
 
-		err := StructNotCache(data).(*ValidationError)
+		err := getTestValid().StructNotCache(data).(*ValidationError)
 		wants := map[string]string{
 			"Items-1": "请输入a1字段",
 		}

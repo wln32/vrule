@@ -37,7 +37,7 @@
 "min-length"           = "{field}字段值`{value}`字段最小长度应当为{min}"
 "max-length"           = "{field}字段值`{value}`字段最大长度应当为{max}"
 "size"                 = "{field}字段值`{value}`字段长度必须应当为{size}"
-"between"              = "{field}字段值`{value}`必须介于 {min}和{max}之间"
+"between"              = "{field}字段值`{value}`必须介于{min}和{max}之间"
 "min"                  = "{field}字段值`{value}`字段最小值应当为{min}"
 "max"                  = "{field}字段值`{value}`字段最大值应当为{max}"
 "in"                   = "{field}字段值`{value}`字段值应当满足取值范围:{pattern}"
@@ -52,8 +52,6 @@
 #######################################################################
 "same"                 = "{field}字段值`{value}`字段值必须和{field}相同"
 "different"            = "{field}字段值`{value}`字段值不能与{field}相同"
-
-
 "lte"=       "{field}字段值`{value}`必须小于或等于字段{field1}值`{value1}`"
 "lt"=        "{field}字段值`{value}`必须小于字段{field1}值`{value1}`"
 "gte"=      "{field}字段值`{value}`必须大于或等于字段{field1}值`{value1}`"

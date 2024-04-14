@@ -20,7 +20,7 @@ func Test_Regex_Domain_Basic(t *testing.T) {
 			"Domain":  "The Domain value `goframe#org` is not a valid domain format",
 			"Domain1": "The Domain1 value `1a.2b` is not a valid domain format",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -32,7 +32,7 @@ func Test_Regex_Domain_Basic(t *testing.T) {
 			Domain:  "goframe.org",
 			Domain1: "99designs.com",
 		}
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 
@@ -49,7 +49,7 @@ func Test_Regex_Url_Basic(t *testing.T) {
 		wants := map[string]string{
 			"URL": "The URL value `ws://goframe.org` is not a valid URL address",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -60,7 +60,7 @@ func Test_Regex_Url_Basic(t *testing.T) {
 		obj := &RegexUrlStruct{
 			URL: "https://www.bilibili.com/",
 		}
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -76,7 +76,7 @@ func Test_Regex_Mac_Basic(t *testing.T) {
 		wants := map[string]string{
 			"MAC": "The MAC value `Z0-CC-6A-D6-B1-1A` is not a valid MAC address",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -87,7 +87,7 @@ func Test_Regex_Mac_Basic(t *testing.T) {
 		obj := &RegexMacStruct{
 			MAC: "4C-CC-6A-D6-B1-1A",
 		}
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -110,7 +110,7 @@ func Test_Regex_Ip_Basic(t *testing.T) {
 			"Ipv4": "The Ipv4 value `520.255.255.255` is not a valid IPv4 address",
 			"Ip2":  "The Ip2 value `ze80::812b:1158:1f43:f0d1` is not a valid IP address",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -124,7 +124,7 @@ func Test_Regex_Ip_Basic(t *testing.T) {
 			Ipv4: "193.255.255.255", // error >= 10000
 			Ip2:  "2001:0da8:0207:0000:0000:0000:0000:8207",
 		}
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -140,7 +140,7 @@ func Test_Regex_QQ_Basic(t *testing.T) {
 		wants := map[string]string{
 			"QQ": "The QQ value `9999` is not a valid QQ number",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -151,7 +151,7 @@ func Test_Regex_QQ_Basic(t *testing.T) {
 		obj := &RegexQQStruct{
 			QQ: "123456789",
 		}
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -174,7 +174,7 @@ func Test_Regex_Password_Basic(t *testing.T) {
 			"Password3": "The Password3 value `9851af47953a` is not a valid password format",
 		}
 
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -188,7 +188,7 @@ func Test_Regex_Password_Basic(t *testing.T) {
 			Password2: "Aqwehbj13142",
 			Password3: "gAtrgfhg1454#0",
 		}
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -206,7 +206,7 @@ func Test_Regex_BankCard_Basic(t *testing.T) {
 			"BankCard1": "The BankCard1 value `6225760079930218` is not a valid bank card number",
 		}
 
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -218,7 +218,7 @@ func Test_Regex_BankCard_Basic(t *testing.T) {
 		obj := Regex_BankCard_Struct{
 			BankCard1: "6259650871772098",
 		}
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -236,7 +236,7 @@ func Test_Regex_ResidentId_Basic(t *testing.T) {
 			"ResidentId": "The ResidentId value `320107199506285482` is not a valid resident id number",
 		}
 
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -258,7 +258,7 @@ func Test_Regex_Postcode_Basic(t *testing.T) {
 		wants := map[string]string{
 			"Postcode": "The Postcode value `1000000` is not a valid postcode format",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -270,7 +270,7 @@ func Test_Regex_Postcode_Basic(t *testing.T) {
 		obj := Regex_Postcode_Struct{
 			Postcode: "100000",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		t.Assert(err, nil)
 	})
@@ -288,7 +288,7 @@ func Test_Regex_Passport_Basic(t *testing.T) {
 		wants := map[string]string{
 			"Passport": "The Passport value `123456` is not a valid passport format",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -300,7 +300,7 @@ func Test_Regex_Passport_Basic(t *testing.T) {
 		obj := Regex_Passport_Struct{
 			Passport: "a100000",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 		t.Assert(err, nil)
 	})
 }
@@ -317,7 +317,7 @@ func Test_Regex_Telephone_Basic(t *testing.T) {
 		wants := map[string]string{
 			"Telephone": "The Telephone value `20-77542145` is not a valid telephone number",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -330,7 +330,7 @@ func Test_Regex_Telephone_Basic(t *testing.T) {
 			Telephone: "010-77542145",
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -347,7 +347,7 @@ func Test_Regex_PhoneLoose_Basic(t *testing.T) {
 			"Phone": "The Phone value `11578912345` is not a valid phone number",
 		}
 
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -360,7 +360,7 @@ func Test_Regex_PhoneLoose_Basic(t *testing.T) {
 		obj := Regex_PhoneLoose_Struct{
 			Phone: "13578912345",
 		}
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -377,7 +377,7 @@ func Test_Regex_Email_Basic(t *testing.T) {
 		wants := map[string]string{
 			"Email": "The Email value `gf#goframe.org` is not a valid email address",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -389,7 +389,7 @@ func Test_Regex_Email_Basic(t *testing.T) {
 		obj := Regex_Email_Struct{
 			Email: "gf@goframe.org.cn",
 		}
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -407,7 +407,7 @@ func Test_Regex_Phone_Basic(t *testing.T) {
 			"Phone": "The Phone value `11578912345` is not a valid phone number",
 		}
 
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -419,7 +419,7 @@ func Test_Regex_Phone_Basic(t *testing.T) {
 		obj := Regex_Phone_Struct{
 			Phone: "13578912345",
 		}
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -442,7 +442,7 @@ func Test_Regex_Regex_Basic(t *testing.T) {
 			"Pattern":  "The Pattern value `1234` must be in regex of: [1-9][0-9]{4,14}",
 			"Pattern2": "The Pattern2 value `01234` must be in regex of: [1-9][0-9]{4,14}",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -457,7 +457,7 @@ func Test_Regex_Regex_Basic(t *testing.T) {
 			Pattern2: "1101234",
 			Pattern3: "10233000",
 		}
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -477,7 +477,7 @@ func Test_Regex_NotRegex_Basic(t *testing.T) {
 		wants := map[string]string{
 			"Regex2": "The Regex2 value `1234` should not be in regex of: \\d{4}",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -491,7 +491,7 @@ func Test_Regex_NotRegex_Basic(t *testing.T) {
 			Regex2: "hghghghgh",
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }

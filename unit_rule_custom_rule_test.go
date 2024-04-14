@@ -41,7 +41,7 @@ func Test_CustomRule_Basic(t *testing.T) {
 		var customStruct = CustomStruct{
 			Name: "myn",
 		}
-		err = StructNotCache(customStruct)
+		err = getTestValid().StructNotCache(customStruct)
 		t.Assert(err, "the length of the string after removing spaces must be 6 characters")
 	})
 
@@ -75,7 +75,7 @@ func Test_CustomRule_DuplicateDefinition(t *testing.T) {
 		var customStruct = CustomStruct{
 			Min: 20,
 		}
-		err = StructNotCache(customStruct)
+		err = getTestValid().StructNotCache(customStruct)
 		t.Assert(err, `strconv.Atoi: parsing "": invalid syntax`)
 	})
 
@@ -113,7 +113,7 @@ func Test_CustomRule_AssocField(t *testing.T) {
 			Name: "myn",
 		}
 
-		err = StructNotCache(customStruct)
+		err = getTestValid().StructNotCache(customStruct)
 
 		t.Assert(err, "current structure: vrule.CustomStruct has no rules to verify")
 	})

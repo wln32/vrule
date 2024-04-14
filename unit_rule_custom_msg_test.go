@@ -20,7 +20,7 @@ func Test_Struct_Required_CustomMsg(t *testing.T) {
 			"Name": "名称长度为6到16个字符",
 			"Age":  "年龄为18到30周岁",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -47,7 +47,7 @@ func Test_Struct_MaxMin_CustomMsg(t *testing.T) {
 			"Max": "最大值不能超过5",
 			"Min": "最小值不能小于-5",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -74,7 +74,7 @@ func Test_Struct_Required_CustomMsg_2(t *testing.T) {
 			"Id":       "ID不能为空",
 			"Age":      "年龄不能为空",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -103,7 +103,7 @@ func Test_Struct_With_EmbeddedObject(t *testing.T) {
 				Pass2: "2",
 			},
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 		wants := map[string]string{
 			"Name":      "请输入您的姓名",
 			"password1": "The password1 value `1` must be the same as field Pass2 value `2`",
@@ -133,7 +133,7 @@ func Test_Struct_Optional(t *testing.T) {
 			Page: 1,
 			Size: 10,
 		}
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 	gtest.C(t, func(t *gtest.T) {
@@ -150,7 +150,7 @@ func Test_Struct_Optional(t *testing.T) {
 			"ProjectId": "project id must between 1, 10000",
 		}
 
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -179,7 +179,7 @@ func Test_Struct_NoValidTag_Ptr(t *testing.T) {
 			"Age": "The Age value `0` must be equal or greater than 18",
 		}
 
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		fieldError := err.GetStructFieldError("Params").GetFieldError("Age")
 		t.Assert(fieldError, wants["Age"])

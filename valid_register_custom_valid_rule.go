@@ -2,9 +2,10 @@ package vrule
 
 import (
 	"fmt"
-	"github.com/wln32/vrule/ruleimpl"
 	"strings"
 	"sync"
+
+	"github.com/wln32/vrule/ruleimpl"
 )
 
 // 校验时rule
@@ -18,17 +19,11 @@ type RegisterCustomRuleOption struct {
 var (
 	customFuncMutex      sync.Mutex
 	defaultCustomRuleMsg = "{field} does not satisfy the condition {customrule}"
+
+	customValidRuleFuncMap                  = map[string]ruleimpl.CustomValidRuleFunc{}
+	registerCustomRuleInvalidParameterError = fmt.Errorf("registered verification function or rule name cannot be empty")
+	registerCustomRuleExistsError           = "rule:`%s` you registered already exists and cannot be registered again"
 )
-
-var customRuleMsgMap = map[string]string{}
-
-var customValidRuleFuncMap = map[string]ruleimpl.CustomValidRuleFunc{}
-
-var registerCustomRuleInvalidOptionError = fmt.Errorf("invalid custom rule option")
-
-var registerCustomRuleInvalidParameterError = fmt.Errorf("registered verification function or rule name cannot be empty")
-
-var registerCustomRuleExistsError = "rule:`%s` you registered already exists and cannot be registered again"
 
 func RegisterCustomRuleFunc(option RegisterCustomRuleOption) error {
 

@@ -12,6 +12,16 @@ import (
 	"github.com/gogf/gf/v2/util/grand"
 )
 
+var testValid *Validator
+
+func getTestValid() *Validator {
+	if testValid == nil {
+		testValid = New()
+		testValid.StopOnFirstError(false)
+	}
+	return testValid
+}
+
 func Test_Struct_MultipleLevels(t *testing.T) {
 
 	type TestErrorStruct struct {
@@ -48,7 +58,7 @@ func Test_Struct_MultipleLevels(t *testing.T) {
 	gtest.C(t, func(t *gtest.T) {
 
 		for i := 0; i < 1000; i++ {
-			err := StructNotCache(arg).(*ValidationError)
+			err := getTestValid().StructNotCache(arg).(*ValidationError)
 			idError := err.GetFieldError("ID")
 			t.Assert(idError, "The ID field is required")
 			scoresError := err.GetFieldError("Scores")
@@ -154,7 +164,7 @@ func Benchmark_Struct_Test(b *testing.B) {
 	b.Run("通用化接口", func(b *testing.B) {
 		b.ResetTimer()
 		for i := 0; i < b.N; i++ {
-			StructNotCache(req2)
+			getTestValid().StructNotCache(req2)
 		}
 	})
 }

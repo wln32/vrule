@@ -16,14 +16,14 @@ vrule它具有以下功能：
 ---
 # 安装
 
-#### go版本要求 >=1.18
+#### go版本要求 >= 1.18
 
 #### 使用go get
-```go
+```
 go get -u github.com/wln32/vrule
 ```
 然后将验证程序包导入到您自己的代码中<br>
-```go
+```
 import github.com/wln32/vrule
 ```
 ----
@@ -142,14 +142,13 @@ valid.SetFilterFieldFunc(func(structType reflect.Type, field reflect.StructField
 ---
 
 # 只获取第一个错误
-vrule默认获取到全部的错误，不会在第一个错误时停下</br>
-如果需要第一个错误就返回需要调用StopOnFirstError</br>
+vrule默认遇到第一个错误时停下</br>
+如果需要获取全部错误需要调用StopOnFirstError</br>
 ```go
 valid := New()
-// 设置为true代表遇到第一个错误时就立即返回
-valid.StopOnFirstError(true)
+// 设置为false代表获取所有错误
+valid.StopOnFirstError(false)
 
-obj := &OptionStopOnFirstError{}
 ```
 ---
 # 替换错误提示信息

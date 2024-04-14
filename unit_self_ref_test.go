@@ -49,7 +49,7 @@ func Test_my_Struct_Self_Reference(t *testing.T) {
 	}
 
 	gtest.C(t, func(t *gtest.T) {
-		err := StructNotCache(arg)
+		err := getTestValid().StructNotCache(arg)
 
 		t.AssertNE(err, nil)
 	})
@@ -72,7 +72,7 @@ func Test_validator_Struct_Self_Reference(t *testing.T) {
 	}
 
 	gtest.C(t, func(t *gtest.T) {
-		err := StructNotCache(arg)
+		err := getTestValid().StructNotCache(arg)
 		_ = err
 	})
 }

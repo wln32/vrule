@@ -30,7 +30,7 @@ func Test_Custom_BasicType(t *testing.T) {
 		B int `v:"lte:A"`
 	}
 
-	err := StructNotCache(CustomBasicType{
+	err := getTestValid().StructNotCache(CustomBasicType{
 		B: 10,
 	})
 

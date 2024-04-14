@@ -52,7 +52,7 @@ func Test_Between_Basic(t *testing.T) {
 			"Float32": "The Float32 value `120` must be between 1 and 20",
 			"Float64": "The Float64 value `130` must be between 1 and 20",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for i := 0; i < 100; i++ {
 			for rule, msg := range wants {
@@ -76,7 +76,7 @@ func Test_Between_Basic(t *testing.T) {
 			Float32: 12,
 			Float64: 13,
 		}
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -102,7 +102,7 @@ func Test_NotIn_Basic(t *testing.T) {
 			"Int":   "The Int value `1` must not be in range: 1,20",
 			"Uint8": "The Uint8 value `20` must not be in range: 1,20",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -112,7 +112,7 @@ func Test_NotIn_Basic(t *testing.T) {
 	gtest.C(t, func(t *gtest.T) {
 		obj := &NotIn_BasicStruct{}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 
@@ -141,7 +141,7 @@ func Test_In_Basic(t *testing.T) {
 			"Float32": "The Float32 value `120` is not in acceptable range: 1,20",
 		}
 
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -157,7 +157,7 @@ func Test_In_Basic(t *testing.T) {
 			Float32: 20,
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 
@@ -203,7 +203,7 @@ func Test_Cmp_lte_Basic(t *testing.T) {
 	}
 
 	gtest.C(t, func(t *gtest.T) {
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -250,7 +250,7 @@ func Test_Cmp_lt_Basic(t *testing.T) {
 
 	gtest.C(t, func(t *gtest.T) {
 
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -280,7 +280,7 @@ func Test_Cmp_gt_Basic(t *testing.T) {
 
 	gtest.C(t, func(t *gtest.T) {
 
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -308,7 +308,7 @@ func Test_Cmp_gte_Basic(t *testing.T) {
 			"Score11": "The Score11 value `0` must be greater than or equal to field Score1 value `18`",
 			"Score12": "The Score12 value `0` must be greater than or equal to field Score1 value `18`",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -330,7 +330,7 @@ func Test_EqString_Basic(t *testing.T) {
 		wants := map[string]string{
 			"Name2": "The Name2 value `wln32` must be equal to field Name1 value ``",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -343,7 +343,7 @@ func Test_EqString_Basic(t *testing.T) {
 			Name1: "wln32",
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -361,7 +361,7 @@ func Test_EqNumber_Basic(t *testing.T) {
 		wants := map[string]string{
 			"Name2": "The Name2 value `32` must be equal to field Name1 value `0`",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -374,7 +374,7 @@ func Test_EqNumber_Basic(t *testing.T) {
 			Name1: 32,
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -392,7 +392,7 @@ func Test_EqBool_Basic(t *testing.T) {
 		wants := map[string]string{
 			"Name2": "The Name2 value `true` must be equal to field Name1 value `false`",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -405,7 +405,7 @@ func Test_EqBool_Basic(t *testing.T) {
 			Name1: true,
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -424,7 +424,7 @@ func Test_NotEqString_Basic(t *testing.T) {
 		wants := map[string]string{
 			"Name2": "The Name2 value `wln32` must not be equal to field Name1 value `wln32`",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -437,7 +437,7 @@ func Test_NotEqString_Basic(t *testing.T) {
 			Name2: "wln32",
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 
@@ -457,7 +457,7 @@ func Test_NotEqNumber_Basic(t *testing.T) {
 		wants := map[string]string{
 			"Name2": "The Name2 value `32` must not be equal to field Name1 value `32`",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -469,7 +469,7 @@ func Test_NotEqNumber_Basic(t *testing.T) {
 			Name2: 32,
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -488,7 +488,7 @@ func Test_NotEqBool_Basic(t *testing.T) {
 		wants := map[string]string{
 			"Name2": "The Name2 value `true` must not be equal to field Name1 value `true`",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -500,7 +500,7 @@ func Test_NotEqBool_Basic(t *testing.T) {
 			Name2: true,
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -516,7 +516,7 @@ func Test_Max_Basic(t *testing.T) {
 		wants := map[string]string{
 			"Name1": "The Name1 value `64` must be equal or lesser than 32",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -528,7 +528,7 @@ func Test_Max_Basic(t *testing.T) {
 			Name1: 20,
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -544,7 +544,7 @@ func Test_Min_Basic(t *testing.T) {
 		wants := map[string]string{
 			"Name1": "The Name1 value `20` must be equal or greater than 32",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -556,7 +556,7 @@ func Test_Min_Basic(t *testing.T) {
 			Name1: 64,
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }

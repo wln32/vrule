@@ -36,7 +36,7 @@ func Test_CheckStruct_Recursive_Struct(t *testing.T) {
 		}
 
 		for i := 0; i < 100; i++ {
-			err := StructNotCache(obj).(*ValidationError)
+			err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 			t.Assert(err.GetFieldError("Name"), wants["Name"])
 			t.Assert(err.GetStructFieldError("Pass").GetFieldError("Pass1"), wants["Pass1"])
@@ -80,7 +80,7 @@ func Test_CheckStruct_Recursive_SliceStruct(t *testing.T) {
 		}
 
 		for i := 0; i < 100; i++ {
-			err := StructNotCache(obj).(*ValidationError)
+			err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 			t.Assert(err.GetFieldError("Name"), wants["Name"])
 
@@ -131,7 +131,7 @@ func Test_CheckStruct_Recursive_MapStruct_Bail(t *testing.T) {
 		}
 
 		for i := 0; i < 100; i++ {
-			err := StructNotCache(obj).(*ValidationError)
+			err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 			t.Assert(err.GetFieldError("Name"), wants["Name"])
 			mapFieldError := err.GetMapFieldError("Passes")

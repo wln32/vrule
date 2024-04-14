@@ -17,7 +17,7 @@ func Test_Format_Boolean_Basic(t *testing.T) {
 		wants := map[string]string{
 			"Name1": "The Name1 value `hel` field must be true or false",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -29,7 +29,7 @@ func Test_Format_Boolean_Basic(t *testing.T) {
 			Name1: "false",
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -45,7 +45,7 @@ func Test_Format_Float_Basic(t *testing.T) {
 		wants := map[string]string{
 			"Name1": "The Name1 value `1gfdkg` is not of valid float type",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -57,7 +57,7 @@ func Test_Format_Float_Basic(t *testing.T) {
 			Name1: "2.34",
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -73,7 +73,7 @@ func Test_Format_Integer_Basic(t *testing.T) {
 		wants := map[string]string{
 			"Name1": "The Name1 value `1gfdkg` is not an integer",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -85,7 +85,7 @@ func Test_Format_Integer_Basic(t *testing.T) {
 			Name1: "2",
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
@@ -101,7 +101,7 @@ func Test_Format_Json_Basic(t *testing.T) {
 		wants := map[string]string{
 			"Name1": "The Name1 value `1gfdkg` is not a valid JSON string",
 		}
-		err := StructNotCache(obj).(*ValidationError)
+		err := getTestValid().StructNotCache(obj).(*ValidationError)
 
 		for rule, msg := range wants {
 			fieldError := err.GetFieldError(rule)
@@ -113,7 +113,7 @@ func Test_Format_Json_Basic(t *testing.T) {
 			Name1: `{"longName":1}`,
 		}
 
-		err := StructNotCache(obj).(*ValidationError).Errors()
+		err := getTestValid().StructNotCache(obj).(*ValidationError).Errors()
 		t.Assert(err, nil)
 	})
 }
