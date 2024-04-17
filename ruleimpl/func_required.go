@@ -79,7 +79,7 @@ type RequiredIfRule struct {
 func (r *RequiredIfRule) Run(ctx context.Context, input RuleFuncInput) error {
 	eq := false
 	for _, assocField := range r.AssocFields {
-		// TODO: 实现字段比较，当类型为string  时不能直接比较
+
 		v := input.StructPtr.Field(int(assocField.AssocFieldIndex))
 		if assocField.IsString == false {
 			eq = v.Interface() == assocField.Value

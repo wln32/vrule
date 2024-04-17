@@ -267,7 +267,8 @@ func getRequiredFieldValue(typ reflect.Type, val string) (a any, isstring bool) 
 			return
 		case reflect.String:
 			v.Elem().SetString(val)
-			a = v.Elem().Interface()
+			// 如果是string，则直接返回，不需要返回空接口
+			a = v.Elem().String()
 			isstring = true
 			return
 		default:
